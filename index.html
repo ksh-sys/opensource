@@ -1,0 +1,1661 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 오픈소스 솔루션 가이드 2025</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Malgun Gothic', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #1e3c72;
+        }
+        .header h1 {
+            color: #1e3c72;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .tab-navigation {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .tab-btn {
+            padding: 15px 40px;
+            background: white;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+        .tab-btn:hover {
+            color: #1e3c72;
+            background: #f8f9fa;
+        }
+        .tab-btn.active {
+            color: #1e3c72;
+            border-bottom-color: #1e3c72;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .search-container {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .search-box {
+            width: 100%;
+            max-width: 600px;
+            padding: 15px;
+            font-size: 1.1em;
+            border: 2px solid #1e3c72;
+            border-radius: 25px;
+            outline: none;
+        }
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        .stat-card {
+            text-align: center;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #1e3c72;
+        }
+        .stat-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+        .category-nav {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .category-btn {
+            padding: 8px 16px;
+            border: 2px solid #1e3c72;
+            background: white;
+            color: #1e3c72;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.85em;
+        }
+        .category-btn:hover, .category-btn.active {
+            background: #1e3c72;
+            color: white;
+        }
+        .solutions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+        .solution-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 16px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        .solution-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            border-color: #1e3c72;
+        }
+        .solution-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 8px;
+        }
+        .solution-name {
+            font-weight: bold;
+            font-size: 1.15em;
+            color: #1e3c72;
+            margin-bottom: 6px;
+            flex: 1;
+        }
+        .compare-checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        .solution-vendor {
+            color: #666;
+            font-size: 0.85em;
+            margin-bottom: 8px;
+        }
+        .license-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .license-permissive { background: #e8f5e9; color: #2e7d32; }
+        .license-copyleft { background: #fff3e0; color: #e65100; }
+        .license-proprietary { background: #fce4ec; color: #c2185b; }
+        .solution-url {
+            font-size: 0.8em;
+            color: #2a5298;
+            margin-top: 8px;
+        }
+        .solution-url a {
+            color: #2a5298;
+            text-decoration: none;
+        }
+        .tags-section {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .tag {
+            padding: 3px 8px;
+            background: #e3f2fd;
+            color: #1976d2;
+            border-radius: 10px;
+            font-size: 0.75em;
+        }
+        .features-section {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #f0f0f0;
+        }
+        .features-title {
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #1e3c72;
+            margin-bottom: 6px;
+        }
+        .features-list {
+            font-size: 0.8em;
+            color: #555;
+            line-height: 1.6;
+            padding-left: 16px;
+        }
+        .features-list li {
+            margin-bottom: 3px;
+        }
+        .providers-section {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #f0f0f0;
+        }
+        .providers-title {
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #27ae60;
+            margin-bottom: 5px;
+        }
+        .providers-list {
+            font-size: 0.8em;
+            color: #555;
+            line-height: 1.5;
+            background: #f0fff4;
+            padding: 6px 10px;
+            border-radius: 6px;
+            border-left: 3px solid #27ae60;
+        }
+        /* 솔루션 상세 정보 패널 */
+        .solution-detail-panel {
+            margin-top: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            border: 2px solid #1e3c72;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .detail-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #1e3c72;
+        }
+        .detail-panel-header h4 {
+            color: #1e3c72;
+            margin: 0;
+            font-size: 1.1em;
+        }
+        .close-detail {
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #666;
+            line-height: 1;
+        }
+        .close-detail:hover {
+            color: #f44336;
+        }
+        .detail-solution-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #1e3c72;
+            margin-bottom: 5px;
+        }
+        .detail-vendor {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        .detail-section {
+            margin: 12px 0;
+        }
+        .detail-section-title {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.85em;
+            margin-bottom: 5px;
+        }
+        .detail-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        .detail-tag {
+            padding: 3px 8px;
+            background: #e3f2fd;
+            color: #1976d2;
+            border-radius: 10px;
+            font-size: 0.75em;
+        }
+        .detail-features {
+            padding-left: 18px;
+            font-size: 0.85em;
+            color: #555;
+            line-height: 1.6;
+        }
+        .detail-features li {
+            margin: 4px 0;
+        }
+        .detail-providers {
+            background: #f0fff4;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border-left: 3px solid #27ae60;
+            font-size: 0.85em;
+            color: #2e7d32;
+        }
+        .detail-link {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 15px;
+            background: #1e3c72;
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 0.85em;
+            transition: background 0.3s;
+        }
+        .detail-link:hover {
+            background: #2a5298;
+        }
+        .stack-item.active {
+            border-color: #1e3c72;
+            background: #e3f2fd;
+            box-shadow: 0 2px 8px rgba(30, 60, 114, 0.2);
+        }
+        .compare-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 3px solid #1e3c72;
+            padding: 20px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.2);
+        }
+        .compare-panel.active {
+            transform: translateY(0);
+        }
+        .compare-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .compare-items {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+        .compare-item {
+            min-width: 150px;
+            padding: 10px;
+            background: #e3f2fd;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .remove-compare {
+            background: #f44336;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+        .compare-btn {
+            padding: 12px 30px;
+            background: #1e3c72;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .compare-btn:hover { background: #2a5298; }
+        .compare-btn:disabled { background: #ccc; cursor: not-allowed; }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            overflow-y: auto;
+        }
+        .modal.active { display: block; }
+        .modal-content {
+            background: white;
+            margin: 50px auto;
+            max-width: 1400px;
+            border-radius: 15px;
+            padding: 30px;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .close-modal {
+            font-size: 2em;
+            cursor: pointer;
+            color: #666;
+        }
+        .close-modal:hover { color: #f44336; }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid #e0e0e0;
+        }
+        .comparison-table th {
+            background: #1e3c72;
+            color: white;
+            font-weight: 600;
+        }
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        .license-matrix {
+            margin: 30px 0;
+            overflow-x: auto;
+        }
+        .license-matrix table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+        .license-matrix th, .license-matrix td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+        }
+        .license-matrix th {
+            background: #1e3c72;
+            color: white;
+            font-weight: 600;
+        }
+        .compat-yes { background: #e8f5e9; color: #2e7d32; font-weight: bold; }
+        .compat-no { background: #ffebee; color: #c62828; font-weight: bold; }
+        .compat-maybe { background: #fff3e0; color: #e65100; font-weight: bold; }
+        .alert-box {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .alert-success {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            color: #2e7d32;
+        }
+        .alert-warning {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            color: #e65100;
+        }
+
+        /* 스택 빌더 스타일 */
+        .stack-builder-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        .stack-selection {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .stack-category-section {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 2px solid #e0e0e0;
+        }
+        .stack-category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            cursor: pointer;
+            padding: 10px;
+            background: #1e3c72;
+            color: white;
+            border-radius: 5px;
+        }
+        .stack-category-header:hover {
+            background: #2a5298;
+        }
+        .stack-category-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        .stack-category-badge {
+            background: white;
+            color: #1e3c72;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        .stack-solutions-list {
+            display: none;
+            margin-top: 10px;
+        }
+        .stack-solutions-list.active {
+            display: block;
+        }
+        .stack-solution-item {
+            padding: 10px;
+            margin: 5px 0;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .stack-solution-item:hover {
+            border-color: #1e3c72;
+            background: #e3f2fd;
+        }
+        .stack-solution-item.selected {
+            border-color: #1e3c72;
+            background: #e3f2fd;
+            font-weight: 600;
+        }
+        .stack-solution-item.previewing {
+            border-color: #27ae60;
+            background: #f0fff4;
+            box-shadow: 0 2px 8px rgba(39, 174, 96, 0.2);
+        }
+        .add-to-stack-btn {
+            padding: 5px 12px;
+            background: #1e3c72;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        .add-to-stack-btn:hover {
+            background: #2a5298;
+        }
+        .my-stack-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 3px solid #1e3c72;
+            position: sticky;
+            top: 20px;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+        }
+        .my-stack-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .my-stack-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #1e3c72;
+            margin-bottom: 10px;
+        }
+        .my-stack-count {
+            font-size: 0.9em;
+            color: #666;
+        }
+        .stack-item {
+            background: #f8f9fa;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #1e3c72;
+        }
+        .stack-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 8px;
+        }
+        .stack-item-name {
+            font-weight: bold;
+            color: #1e3c72;
+            font-size: 1em;
+        }
+        .stack-item-category {
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 3px;
+        }
+        .remove-stack-btn {
+            background: #f44336;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 1em;
+            line-height: 24px;
+        }
+        .remove-stack-btn:hover {
+            background: #d32f2f;
+        }
+        .stack-actions {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .stack-action-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1em;
+            transition: all 0.2s ease;
+        }
+        .check-compat-btn {
+            background: #1e3c72;
+            color: white;
+        }
+        .check-compat-btn:hover {
+            background: #2a5298;
+        }
+        .check-compat-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .export-stack-btn {
+            background: #4caf50;
+            color: white;
+        }
+        .export-stack-btn:hover {
+            background: #45a049;
+        }
+        .clear-stack-btn {
+            background: #f44336;
+            color: white;
+        }
+        .clear-stack-btn:hover {
+            background: #d32f2f;
+        }
+        .empty-stack-message {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+        .empty-stack-message .emoji {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 1200px) {
+            .stack-builder-container {
+                grid-template-columns: 1fr;
+            }
+            .my-stack-panel {
+                position: static;
+                max-height: none;
+            }
+        }
+        @media (max-width: 768px) {
+            .solutions-grid { grid-template-columns: 1fr; }
+            .header h1 { font-size: 1.8em; }
+            .comparison-table { font-size: 0.85em; }
+            .tab-btn { padding: 12px 20px; font-size: 1em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 오픈소스 솔루션 가이드 2025</h1>
+            <p style="color: #666; margin-top: 10px;">235+ 솔루션 비교·분석으로 찾는 최적의 기술 스택</p>
+        </div>
+
+        <div class="tab-navigation">
+            <button class="tab-btn active" onclick="switchTab('explorer')">🔍 솔루션 탐색</button>
+            <button class="tab-btn" onclick="switchTab('builder')">🛠️ 스택 구성</button>
+        </div>
+
+        <!-- 솔루션 탐색 탭 -->
+        <div id="explorerTab" class="tab-content active">
+            <div class="search-container">
+                <input type="text" class="search-box" id="searchBox" placeholder="솔루션, 기업명, 카테고리 검색...">
+            </div>
+            <div class="stats-section">
+                <div class="stat-card"><div class="stat-number" id="totalSolutions">0</div><div class="stat-label">총 솔루션 수</div></div>
+                <div class="stat-card"><div class="stat-number" id="totalCategories">0</div><div class="stat-label">카테고리 수</div></div>
+                <div class="stat-card"><div class="stat-number" id="totalVendors">0</div><div class="stat-label">참여 기업/재단</div></div>
+                <div class="stat-card"><div class="stat-number" id="selectedCount">0</div><div class="stat-label">비교 선택</div></div>
+            </div>
+            <div class="category-nav" id="categoryNav"></div>
+            <div class="solutions-grid" id="solutionsGrid"></div>
+        </div>
+
+        <!-- 스택 구성 탭 -->
+        <div id="builderTab" class="tab-content">
+            <div class="stack-builder-container">
+                <div class="stack-selection">
+                    <h2 style="color: #1e3c72; margin-bottom: 20px;">카테고리별 솔루션 선택</h2>
+                    <div id="stackCategoriesContainer"></div>
+                </div>
+                <div class="my-stack-panel">
+                    <div class="my-stack-header">
+                        <div class="my-stack-title">🎯 나의 기술 스택</div>
+                        <div class="my-stack-count"><span id="stackCount">0</span>개 솔루션 선택됨</div>
+                    </div>
+                    <div id="myStackItems">
+                        <div class="empty-stack-message">
+                            <div class="emoji">📦</div>
+                            <p>카테고리에서 솔루션을 선택하여<br>나만의 기술 스택을 구성하세요!</p>
+                        </div>
+                    </div>
+                    <div class="stack-actions">
+                        <button class="stack-action-btn check-compat-btn" id="checkCompatBtn" onclick="checkStackCompatibility()" disabled>
+                            ⚖️ 라이선스 호환성 검사
+                        </button>
+                        <button class="stack-action-btn export-stack-btn" id="exportStackBtn" onclick="exportStack()" disabled>
+                            💾 스택 구성 내보내기
+                        </button>
+                        <button class="stack-action-btn clear-stack-btn" id="clearStackBtn" onclick="clearStack()" disabled>
+                            🗑️ 전체 초기화
+                        </button>
+                    </div>
+                    <!-- 솔루션 상세 정보 패널 -->
+                    <div id="solutionDetailPanel" class="solution-detail-panel" style="display:none;">
+                        <div class="detail-panel-header">
+                            <h4>📋 솔루션 상세 정보</h4>
+                            <span class="close-detail" onclick="closeSolutionDetail()">×</span>
+                        </div>
+                        <div id="solutionDetailContent"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="compare-panel" id="comparePanel">
+        <div class="compare-header">
+            <h3>비교할 솔루션 선택 (<span id="compareCount">0</span>/4)</h3>
+            <button class="compare-btn" id="compareBtn" onclick="showComparison()" disabled>라이선스 호환성 및 비교 분석</button>
+        </div>
+        <div class="compare-items" id="compareItems"></div>
+    </div>
+
+    <div class="modal" id="comparisonModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>⚖️ 솔루션 비교 분석</h2>
+                <span class="close-modal" onclick="closeComparison()">&times;</span>
+            </div>
+            <div id="comparisonContent"></div>
+        </div>
+    </div>
+    <script>
+        // 로컬 스토리지 키
+        const STORAGE_KEY = 'opensource_solutions_data';
+
+        // 데이터 로드 함수
+        function loadSolutions() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                try {
+                    return JSON.parse(saved);
+                } catch (e) {
+                    console.error('데이터 로드 실패:', e);
+                    return getDefaultSolutions();
+                }
+            }
+            return getDefaultSolutions();
+        }
+
+        // 기본 솔루션 데이터
+        function getDefaultSolutions() {
+            return {
+            "운영체제": [
+                {n:"Ubuntu",v:"Canonical",l:"GPL",t:"copyleft",u:"ubuntu.com",tags:["Linux","Desktop","Server"],f:["사용자 친화적 인터페이스","5년 LTS 지원","대규모 커뮤니티"]},
+                {n:"Debian",v:"Debian Project",l:"DFSG",t:"permissive",u:"debian.org",tags:["Linux","Server","Stable"],f:["높은 안정성","방대한 패키지","엄격한 품질 관리"]},
+                {n:"CentOS Stream",v:"Red Hat",l:"GPL",t:"copyleft",u:"centos.org",tags:["Linux","Enterprise"],f:["RHEL 업스트림","엔터프라이즈급 안정성","기업 환경 최적화"]},
+                {n:"Rocky Linux",v:"Rocky Enterprise",l:"BSD",t:"permissive",u:"rockylinux.org",tags:["Linux","RHEL"],f:["RHEL 완벽 호환","커뮤니티 주도","무료 엔터프라이즈 OS"]},
+                {n:"AlmaLinux",v:"AlmaLinux Foundation",l:"BSD",t:"permissive",u:"almalinux.org",tags:["Linux","RHEL"],f:["CentOS 대체","CloudLinux 후원","장기 지원"]},
+                {n:"Fedora",v:"Red Hat",l:"GPL",t:"copyleft",u:"getfedora.org",tags:["Linux","Desktop"],f:["최신 기술 선도","RHEL 테스트베드","6개월 릴리스"]},
+                {n:"openSUSE",v:"SUSE",l:"GPL",t:"copyleft",u:"opensuse.org",tags:["Linux","YaST"],f:["YaST 시스템 관리","Leap/Tumbleweed 선택","유럽 기반"]},
+                {n:"Arch Linux",v:"Arch Community",l:"GPL",t:"copyleft",u:"archlinux.org",tags:["Linux","Rolling"],f:["롤링 릴리스","최소주의 철학","AUR 패키지"]},
+                {n:"Manjaro",v:"Manjaro Community",l:"GPL",t:"copyleft",u:"manjaro.org",tags:["Linux","Desktop"],f:["Arch 기반 사용 편의성","하드웨어 자동 감지","다양한 데스크톱 환경"]},
+                {n:"Linux Mint",v:"Linux Mint Team",l:"GPL",t:"copyleft",u:"linuxmint.com",tags:["Linux","Desktop"],f:["Ubuntu 기반","Cinnamon 데스크톱","초보자 친화적"]},
+                {n:"FreeBSD",v:"FreeBSD Foundation",l:"BSD",t:"permissive",u:"freebsd.org",tags:["BSD","Server"],f:["ZFS 파일시스템","jail 컨테이너","고성능 네트워킹"]},
+                {n:"OpenBSD",v:"OpenBSD Project",l:"BSD",t:"permissive",u:"openbsd.org",tags:["BSD","Security"],f:["보안 최우선","코드 감사","OpenSSH 개발"]}
+            ],
+            "데이터베이스": [
+                {n:"PostgreSQL",v:"PostgreSQL Global",l:"PostgreSQL",t:"permissive",u:"postgresql.org",tags:["RDBMS","SQL","ACID"],f:["ACID 완벽 지원","복잡한 쿼리 최적화","JSON/XML 지원"]},
+                {n:"MySQL",v:"Oracle",l:"GPL v2",t:"copyleft",u:"mysql.com",tags:["RDBMS","SQL","Web"],f:["웹 애플리케이션 표준","InnoDB 스토리지 엔진","복제 및 클러스터링"]},
+                {n:"MariaDB",v:"MariaDB Foundation",l:"GPL v2",t:"copyleft",u:"mariadb.org",tags:["RDBMS","MySQL"],f:["MySQL 완벽 호환","성능 개선","새로운 스토리지 엔진"]},
+                {n:"MongoDB",v:"MongoDB Inc",l:"SSPL",t:"copyleft",u:"mongodb.com",tags:["NoSQL","Document"],f:["유연한 스키마","수평 확장","JSON 기반 문서"]},
+                {n:"Redis",v:"Redis Ltd",l:"BSD",t:"permissive",u:"redis.io",tags:["NoSQL","Cache","Memory"],f:["인메모리 속도","다양한 자료구조","Pub/Sub 메시징"]},
+                {n:"Cassandra",v:"Apache",l:"Apache 2.0",t:"permissive",u:"cassandra.apache.org",tags:["NoSQL","Distributed"],f:["대규모 분산 처리","고가용성","선형 확장성"]},
+                {n:"CouchDB",v:"Apache",l:"Apache 2.0",t:"permissive",u:"couchdb.apache.org",tags:["NoSQL","Document"],f:["HTTP REST API","멀티 마스터 복제","오프라인 동기화"]},
+                {n:"CUBRID",v:"큐브리드",l:"GPL v2",t:"copyleft",u:"cubrid.com",tags:["RDBMS","국산"],f:["웹 환경 최적화","HA 기능","한글 완벽 지원"]},
+                {n:"Tibero",v:"티맥스소프트",l:"Commercial",t:"proprietary",u:"tmaxsoft.com",tags:["RDBMS","국산"],f:["Oracle 호환","고성능 처리","국내 기술 지원"]},
+                {n:"InfluxDB",v:"InfluxData",l:"MIT",t:"permissive",u:"influxdata.com",tags:["NoSQL","TimeSeries"],f:["시계열 데이터 최적화","SQL 유사 쿼리","고속 데이터 수집"]},
+                {n:"Neo4j",v:"Neo4j Inc",l:"GPL v3",t:"copyleft",u:"neo4j.com",tags:["NoSQL","Graph"],f:["그래프 데이터베이스","Cypher 쿼리 언어","관계 분석 최적화"]},
+                {n:"Elasticsearch",v:"Elastic",l:"SSPL",t:"copyleft",u:"elastic.co",tags:["NoSQL","Search"],f:["전문 검색 엔진","분산 아키텍처","실시간 분석"]},
+                {n:"Memcached",v:"Memcached",l:"BSD",t:"permissive",u:"memcached.org",tags:["Cache","Memory"],f:["단순하고 빠름","분산 캐싱","낮은 메모리 사용"]},
+                {n:"RocksDB",v:"Meta",l:"Apache 2.0",t:"permissive",u:"rocksdb.org",tags:["NoSQL","Embedded"],f:["임베디드 KV 스토어","SSD 최적화","압축 지원"]},
+                {n:"SQLite",v:"SQLite",l:"Public Domain",t:"permissive",u:"sqlite.org",tags:["RDBMS","Embedded"],f:["서버리스","단일 파일 DB","제로 설정"]},
+                {n:"ArangoDB",v:"ArangoDB",l:"Apache 2.0",t:"permissive",u:"arangodb.com",tags:["NoSQL","Multi-model"],f:["멀티모델 지원","AQL 쿼리 언어","그래프+문서+KV"]},
+                {n:"Couchbase",v:"Couchbase",l:"Apache 2.0",t:"permissive",u:"couchbase.com",tags:["NoSQL","Document"],f:["N1QL 쿼리","메모리 우선 아키텍처","모바일 동기화"]},
+                {n:"ScyllaDB",v:"ScyllaDB",l:"AGPL",t:"copyleft",u:"scylladb.com",tags:["NoSQL","Cassandra-compatible"],f:["Cassandra 호환","C++ 성능","낮은 레이턴시"]}
+            ],
+            "WAS/웹서버": [
+                {n:"Apache HTTP",v:"Apache",l:"Apache 2.0",t:"permissive",u:"httpd.apache.org",tags:["웹서버","HTTP"],f:["모듈 기반 아키텍처","안정적인 성능","광범위한 호환성"]},
+                {n:"Nginx",v:"Nginx Inc",l:"BSD",t:"permissive",u:"nginx.org",tags:["웹서버","Proxy"],f:["비동기 이벤트 기반","리버스 프록시","낮은 메모리 사용"]},
+                {n:"Apache Tomcat",v:"Apache",l:"Apache 2.0",t:"permissive",u:"tomcat.apache.org",tags:["WAS","Java"],f:["서블릿 컨테이너","JSP 엔진","경량 WAS"]},
+                {n:"WildFly",v:"Red Hat",l:"LGPL",t:"copyleft",u:"wildfly.org",tags:["WAS","JBoss"],f:["Java EE 완전 지원","마이크로서비스 대응","클러스터링 기능"]},
+                {n:"Jetty",v:"Eclipse",l:"Apache 2.0",t:"permissive",u:"eclipse.org/jetty",tags:["WAS","Java"],f:["임베디드 사용 가능","비동기 HTTP","경량 구조"]},
+                {n:"JEUS",v:"티맥스소프트",l:"Commercial",t:"proprietary",u:"tmaxsoft.com",tags:["WAS","국산"],f:["국산 WAS","WebLogic 호환","엔터프라이즈 기능"]},
+                {n:"WebtoB",v:"티맥스소프트",l:"Commercial",t:"proprietary",u:"tmaxsoft.com",tags:["웹서버","국산"],f:["국산 웹서버","고성능 처리","WAS 연동 최적화"]},
+                {n:"HAProxy",v:"HAProxy Tech",l:"GPL v2",t:"copyleft",u:"haproxy.org",tags:["LoadBalancer","Proxy"],f:["고가용성 로드밸런서","TCP/HTTP 프록시","헬스체크 기능"]},
+                {n:"Envoy",v:"CNCF",l:"Apache 2.0",t:"permissive",u:"envoyproxy.io",tags:["Proxy","ServiceMesh"],f:["서비스 메시 프록시","동적 설정","관찰성 내장"]},
+                {n:"Traefik",v:"Traefik Labs",l:"MIT",t:"permissive",u:"traefik.io",tags:["Proxy","LoadBalancer"],f:["자동 서비스 발견","Let's Encrypt 통합","동적 리로딩"]},
+                {n:"Caddy",v:"Caddy",l:"Apache 2.0",t:"permissive",u:"caddyserver.com",tags:["웹서버","HTTPS"],f:["자동 HTTPS","간편한 설정","HTTP/3 지원"]},
+                {n:"Lighttpd",v:"Lighttpd",l:"BSD",t:"permissive",u:"lighttpd.net",tags:["웹서버","경량"],f:["경량 웹서버","낮은 리소스 사용","FastCGI 지원"]},
+                {n:"GlassFish",v:"Eclipse",l:"EPL",t:"permissive",u:"glassfish.org",tags:["WAS","Java EE"],f:["Java EE 레퍼런스","관리 콘솔","클러스터링"]},
+                {n:"Undertow",v:"Red Hat",l:"Apache 2.0",t:"permissive",u:"undertow.io",tags:["웹서버","Java"],f:["유연한 아키텍처","블로킹/논블로킹","임베드 가능"]}
+            ],
+            "클라우드/컨테이너": [
+                {n:"Kubernetes",v:"CNCF",l:"Apache 2.0",t:"permissive",u:"kubernetes.io",tags:["Container","K8s"],f:["컨테이너 오케스트레이션","자동 스케일링","자가 치유"]},
+                {n:"Docker",v:"Docker Inc",l:"Apache 2.0",t:"permissive",u:"docker.com",tags:["Container","DevOps"],f:["컨테이너 플랫폼","이미지 빌드","레지스트리 제공"]},
+                {n:"OpenStack",v:"OpenInfra",l:"Apache 2.0",t:"permissive",u:"openstack.org",tags:["Cloud","IaaS"],f:["프라이빗 클라우드","모듈형 아키텍처","멀티테넌시"]},
+                {n:"CloudStack",v:"Apache",l:"Apache 2.0",t:"permissive",u:"cloudstack.apache.org",tags:["Cloud","IaaS"],f:["IaaS 플랫폼","멀티 하이퍼바이저","자동 관리"]},
+                {n:"Rancher",v:"SUSE",l:"Apache 2.0",t:"permissive",u:"rancher.com",tags:["K8s","Management"],f:["K8s 관리 플랫폼","멀티 클러스터","통합 보안"]},
+                {n:"K3s",v:"SUSE",l:"Apache 2.0",t:"permissive",u:"k3s.io",tags:["K8s","Edge"],f:["경량 K8s","엣지 최적화","단일 바이너리"]},
+                {n:"Helm",v:"CNCF",l:"Apache 2.0",t:"permissive",u:"helm.sh",tags:["K8s","Package"],f:["K8s 패키지 매니저","차트 저장소","버전 관리"]},
+                {n:"Istio",v:"CNCF",l:"Apache 2.0",t:"permissive",u:"istio.io",tags:["ServiceMesh","K8s"],f:["서비스 메시","트래픽 관리","보안 통신"]},
+                {n:"Prometheus",v:"CNCF",l:"Apache 2.0",t:"permissive",u:"prometheus.io",tags:["Monitoring","Metrics"],f:["메트릭 수집","시계열 DB","알림 시스템"]},
+                {n:"Grafana",v:"Grafana Labs",l:"AGPL",t:"copyleft",u:"grafana.com",tags:["Visualization","Dashboard"],f:["데이터 시각화","대시보드 구성","다중 데이터소스"]},
+                {n:"Portainer",v:"Portainer",l:"Zlib",t:"permissive",u:"portainer.io",tags:["Docker","Management"],f:["컨테이너 관리 UI","간편한 배포","RBAC 지원"]},
+                {n:"containerd",v:"CNCF",l:"Apache 2.0",t:"permissive",u:"containerd.io",tags:["Container","Runtime"],f:["컨테이너 런타임","OCI 표준","경량 데몬"]},
+                {n:"Podman",v:"Red Hat",l:"Apache 2.0",t:"permissive",u:"podman.io",tags:["Container","Daemonless"],f:["데몬리스 컨테이너","루트리스 실행","Docker 호환"]},
+                {n:"LXC/LXD",v:"Linux Containers",l:"LGPL",t:"copyleft",u:"linuxcontainers.org",tags:["Container","System"],f:["시스템 컨테이너","VM 유사 경험","이미지 관리"]},
+                {n:"Nomad",v:"HashiCorp",l:"MPL",t:"copyleft",u:"nomadproject.io",tags:["Orchestration","Scheduler"],f:["워크로드 오케스트레이션","멀티 플랫폼","간편한 설정"]},
+                {n:"OpenShift",v:"Red Hat",l:"Apache 2.0",t:"permissive",u:"openshift.com",tags:["K8s","PaaS"],f:["엔터프라이즈 K8s","개발자 도구","CI/CD 통합"]},
+                {n:"Argo CD",v:"CNCF",l:"Apache 2.0",t:"permissive",u:"argoproj.github.io",tags:["GitOps","CD"],f:["GitOps CD","선언적 배포","자동 동기화"]},
+                {n:"Flux",v:"CNCF",l:"Apache 2.0",t:"permissive",u:"fluxcd.io",tags:["GitOps","CD"],f:["GitOps 툴킷","자동 배포","Helm 통합"]}
+            ],
+            "빅데이터": [
+                {n:"Hadoop",v:"Apache",l:"Apache 2.0",t:"permissive",u:"hadoop.apache.org",tags:["BigData","HDFS"],f:["분산 파일 시스템","맵리듀스 처리","대용량 데이터"]},
+                {n:"Spark",v:"Apache",l:"Apache 2.0",t:"permissive",u:"spark.apache.org",tags:["BigData","Analytics"],f:["인메모리 처리","통합 분석 엔진","배치/스트림"]},
+                {n:"Flink",v:"Apache",l:"Apache 2.0",t:"permissive",u:"flink.apache.org",tags:["BigData","Stream"],f:["실시간 스트림 처리","상태 관리","정확히 한번 보장"]},
+                {n:"Kafka",v:"Apache",l:"Apache 2.0",t:"permissive",u:"kafka.apache.org",tags:["Messaging","Stream"],f:["분산 스트리밍","높은 처리량","내구성 보장"]},
+                {n:"Airflow",v:"Apache",l:"Apache 2.0",t:"permissive",u:"airflow.apache.org",tags:["Workflow","ETL"],f:["워크플로우 관리","DAG 기반","스케줄링"]},
+                {n:"NiFi",v:"Apache",l:"Apache 2.0",t:"permissive",u:"nifi.apache.org",tags:["DataFlow","ETL"],f:["데이터 플로우 자동화","웹 UI","프로세서 체인"]},
+                {n:"Hive",v:"Apache",l:"Apache 2.0",t:"permissive",u:"hive.apache.org",tags:["BigData","SQL"],f:["SQL 쿼리 인터페이스","Hadoop 통합","데이터 웨어하우스"]},
+                {n:"Presto",v:"Linux Foundation",l:"Apache 2.0",t:"permissive",u:"prestodb.io",tags:["BigData","Query"],f:["분산 SQL 엔진","다중 데이터소스","대화형 분석"]},
+                {n:"Trino",v:"Trino",l:"Apache 2.0",t:"permissive",u:"trino.io",tags:["BigData","Query"],f:["고속 SQL 쿼리","연합 쿼리","MPP 아키텍처"]},
+                {n:"Storm",v:"Apache",l:"Apache 2.0",t:"permissive",u:"storm.apache.org",tags:["BigData","Stream"],f:["실시간 계산","확장 가능","내결함성"]},
+                {n:"Samza",v:"Apache",l:"Apache 2.0",t:"permissive",u:"samza.apache.org",tags:["BigData","Stream"],f:["스트림 처리 프레임워크","Kafka 통합","상태 저장"]},
+                {n:"Druid",v:"Apache",l:"Apache 2.0",t:"permissive",u:"druid.apache.org",tags:["BigData","Analytics"],f:["실시간 분석 DB","OLAP 쿼리","빠른 집계"]},
+                {n:"Pinot",v:"Apache",l:"Apache 2.0",t:"permissive",u:"pinot.apache.org",tags:["BigData","OLAP"],f:["실시간 OLAP","낮은 레이턴시","대규모 확장"]},
+                {n:"Kylin",v:"Apache",l:"Apache 2.0",t:"permissive",u:"kylin.apache.org",tags:["BigData","OLAP"],f:["OLAP 큐브 엔진","사전 집계","초고속 쿼리"]},
+                {n:"Beam",v:"Apache",l:"Apache 2.0",t:"permissive",u:"beam.apache.org",tags:["BigData","Pipeline"],f:["통합 프로그래밍 모델","배치/스트림","다중 실행 엔진"]}
+            ],
+            "AI/머신러닝": [
+                {n:"TensorFlow",v:"Google",l:"Apache 2.0",t:"permissive",u:"tensorflow.org",tags:["ML","DeepLearning"],f:["딥러닝 프레임워크","분산 학습","프로덕션 배포"]},
+                {n:"PyTorch",v:"Meta",l:"BSD",t:"permissive",u:"pytorch.org",tags:["ML","DeepLearning"],f:["동적 계산 그래프","연구 친화적","GPU 가속"]},
+                {n:"Scikit-learn",v:"Community",l:"BSD",t:"permissive",u:"scikit-learn.org",tags:["ML","Python"],f:["머신러닝 라이브러리","다양한 알고리즘","간편한 API"]},
+                {n:"Keras",v:"Google",l:"Apache 2.0",t:"permissive",u:"keras.io",tags:["ML","API"],f:["고수준 API","빠른 프로토타이핑","멀티 백엔드"]},
+                {n:"Hugging Face",v:"Hugging Face",l:"Apache 2.0",t:"permissive",u:"huggingface.co",tags:["ML","NLP"],f:["사전학습 모델","Transformers","모델 허브"]},
+                {n:"MLflow",v:"Databricks",l:"Apache 2.0",t:"permissive",u:"mlflow.org",tags:["MLOps","Tracking"],f:["실험 추적","모델 관리","배포 자동화"]},
+                {n:"Kubeflow",v:"Google",l:"Apache 2.0",t:"permissive",u:"kubeflow.org",tags:["MLOps","K8s"],f:["ML on K8s","파이프라인","분산 학습"]},
+                {n:"Ray",v:"Anyscale",l:"Apache 2.0",t:"permissive",u:"ray.io",tags:["ML","Distributed"],f:["분산 컴퓨팅","강화학습","확장 가능"]},
+                {n:"XGBoost",v:"DMLC",l:"Apache 2.0",t:"permissive",u:"xgboost.ai",tags:["ML","GradientBoosting"],f:["그래디언트 부스팅","고성능","병렬 처리"]},
+                {n:"LightGBM",v:"Microsoft",l:"MIT",t:"permissive",u:"lightgbm.readthedocs.io",tags:["ML","GradientBoosting"],f:["빠른 학습 속도","메모리 효율","대규모 데이터"]},
+                {n:"OpenCV",v:"OpenCV",l:"Apache 2.0",t:"permissive",u:"opencv.org",tags:["CV","Vision"],f:["컴퓨터 비전","이미지 처리","실시간 처리"]},
+                {n:"ONNX",v:"Linux Foundation",l:"Apache 2.0",t:"permissive",u:"onnx.ai",tags:["ML","Interoperability"],f:["모델 상호 운용성","표준 포맷","크로스 플랫폼"]},
+                {n:"MXNet",v:"Apache",l:"Apache 2.0",t:"permissive",u:"mxnet.apache.org",tags:["ML","DeepLearning"],f:["효율적인 메모리","다중 언어 API","분산 학습"]},
+                {n:"Caffe",v:"BVLC",l:"BSD",t:"permissive",u:"caffe.berkeleyvision.org",tags:["ML","DeepLearning"],f:["CNN 특화","빠른 추론","모듈식 구조"]},
+                {n:"FastAI",v:"fast.ai",l:"Apache 2.0",t:"permissive",u:"fast.ai",tags:["ML","Education"],f:["쉬운 학습","최신 기법","교육 중심"]},
+                {n:"Ludwig",v:"Uber",l:"Apache 2.0",t:"permissive",u:"ludwig.ai",tags:["ML","AutoML"],f:["코드 없는 ML","선언적 설정","AutoML"]}
+            ],
+            "개발도구": [
+                {n:"Git",v:"Linus Torvalds",l:"GPL v2",t:"copyleft",u:"git-scm.com",tags:["VCS","DevOps"],f:["분산 버전 관리","브랜치 관리","속도 최적화"]},
+                {n:"GitLab",v:"GitLab",l:"MIT",t:"permissive",u:"gitlab.com",tags:["DevOps","CI/CD"],f:["DevOps 플랫폼","통합 CI/CD","프로젝트 관리"]},
+                {n:"Jenkins",v:"Jenkins Project",l:"MIT",t:"permissive",u:"jenkins.io",tags:["CI/CD","Automation"],f:["자동화 서버","플러그인 생태계","파이프라인"]},
+                {n:"VS Code",v:"Microsoft",l:"MIT",t:"permissive",u:"code.visualstudio.com",tags:["IDE","Editor"],f:["경량 에디터","확장 기능","통합 터미널"]},
+                {n:"Eclipse",v:"Eclipse Foundation",l:"EPL",t:"permissive",u:"eclipse.org",tags:["IDE","Java"],f:["Java 개발 IDE","플러그인 아키텍처","리팩토링 도구"]},
+                {n:"IntelliJ IDEA CE",v:"JetBrains",l:"Apache 2.0",t:"permissive",u:"jetbrains.com/idea",tags:["IDE","Java"],f:["지능형 코딩 지원","강력한 리팩토링","프레임워크 통합"]},
+                {n:"SonarQube",v:"SonarSource",l:"LGPL",t:"copyleft",u:"sonarqube.org",tags:["Quality","Analysis"],f:["코드 품질 분석","보안 취약점","기술 부채 관리"]},
+                {n:"Nexus",v:"Sonatype",l:"EPL",t:"permissive",u:"sonatype.com",tags:["Repository","Maven"],f:["아티팩트 저장소","프록시 캐싱","보안 스캔"]},
+                {n:"Maven",v:"Apache",l:"Apache 2.0",t:"permissive",u:"maven.apache.org",tags:["Build","Java"],f:["프로젝트 관리","의존성 관리","빌드 자동화"]},
+                {n:"Gradle",v:"Gradle Inc",l:"Apache 2.0",t:"permissive",u:"gradle.org",tags:["Build","Java"],f:["유연한 빌드","증분 빌드","멀티 프로젝트"]},
+                {n:"Vim",v:"Bram Moolenaar",l:"Vim",t:"permissive",u:"vim.org",tags:["Editor","Terminal"],f:["텍스트 에디터","키보드 중심","확장 가능"]},
+                {n:"Emacs",v:"GNU",l:"GPL v3",t:"copyleft",u:"gnu.org/software/emacs",tags:["Editor","Lisp"],f:["확장 가능 에디터","Elisp 스크립팅","통합 환경"]},
+                {n:"Atom",v:"GitHub",l:"MIT",t:"permissive",u:"atom.io",tags:["Editor","Hackable"],f:["해킹 가능 에디터","웹 기술 기반","패키지 시스템"]},
+                {n:"Sublime Merge",v:"Sublime HQ",l:"Proprietary",t:"proprietary",u:"sublimemerge.com",tags:["Git","GUI"],f:["Git 클라이언트","빠른 성능","시각적 병합"]},
+                {n:"GitHub Desktop",v:"GitHub",l:"MIT",t:"permissive",u:"desktop.github.com",tags:["Git","GUI"],f:["GitHub 통합","간편한 UI","크로스 플랫폼"]},
+                {n:"Postman",v:"Postman",l:"Proprietary",t:"proprietary",u:"postman.com",tags:["API","Testing"],f:["API 테스팅","콜렉션 관리","자동화 테스트"]},
+                {n:"JMeter",v:"Apache",l:"Apache 2.0",t:"permissive",u:"jmeter.apache.org",tags:["Testing","Performance"],f:["부하 테스트","성능 측정","다양한 프로토콜"]},
+                {n:"Selenium",v:"Selenium",l:"Apache 2.0",t:"permissive",u:"selenium.dev",tags:["Testing","Automation"],f:["웹 자동화","크로스 브라우저","다중 언어 지원"]}
+            ],
+            "웹 프레임워크": [
+                {n:"Spring",v:"VMware",l:"Apache 2.0",t:"permissive",u:"spring.io",tags:["Java","Enterprise"],f:["엔터프라이즈 프레임워크","의존성 주입","풍부한 생태계"]},
+                {n:"Django",v:"Django Foundation",l:"BSD",t:"permissive",u:"djangoproject.com",tags:["Python","Web"],f:["풀스택 프레임워크","ORM 내장","관리자 페이지"]},
+                {n:"Flask",v:"Pallets",l:"BSD",t:"permissive",u:"flask.palletsprojects.com",tags:["Python","Micro"],f:["마이크로 프레임워크","유연한 구조","확장 가능"]},
+                {n:"React",v:"Meta",l:"MIT",t:"permissive",u:"react.dev",tags:["JavaScript","Frontend"],f:["컴포넌트 기반","가상 DOM","선언적 UI"]},
+                {n:"Vue.js",v:"Evan You",l:"MIT",t:"permissive",u:"vuejs.org",tags:["JavaScript","Frontend"],f:["점진적 프레임워크","반응형 데이터","쉬운 학습"]},
+                {n:"Angular",v:"Google",l:"MIT",t:"permissive",u:"angular.io",tags:["TypeScript","Frontend"],f:["풀 프레임워크","양방향 바인딩","TypeScript 기반"]},
+                {n:"Node.js",v:"OpenJS Foundation",l:"MIT",t:"permissive",u:"nodejs.org",tags:["JavaScript","Runtime"],f:["JavaScript 런타임","비동기 I/O","이벤트 기반"]},
+                {n:"Express.js",v:"OpenJS Foundation",l:"MIT",t:"permissive",u:"expressjs.com",tags:["JavaScript","Backend"],f:["미니멀 프레임워크","미들웨어","유연한 라우팅"]},
+                {n:"FastAPI",v:"Sebastián Ramírez",l:"MIT",t:"permissive",u:"fastapi.tiangolo.com",tags:["Python","API"],f:["고성능 API","자동 문서화","타입 힌트"]},
+                {n:"Ruby on Rails",v:"Rails Core",l:"MIT",t:"permissive",u:"rubyonrails.org",tags:["Ruby","MVC"],f:["MVC 패턴","관례 우선","빠른 개발"]},
+                {n:"Laravel",v:"Taylor Otwell",l:"MIT",t:"permissive",u:"laravel.com",tags:["PHP","MVC"],f:["우아한 문법","Eloquent ORM","풍부한 기능"]},
+                {n:"Symfony",v:"SensioLabs",l:"MIT",t:"permissive",u:"symfony.com",tags:["PHP","Enterprise"],f:["재사용 가능 컴포넌트","유연한 구조","엔터프라이즈급"]},
+                {n:"ASP.NET Core",v:"Microsoft",l:"MIT",t:"permissive",u:"dotnet.microsoft.com",tags:["C#","Web"],f:["크로스 플랫폼","고성능","클라우드 최적화"]},
+                {n:"Gin",v:"Gin Community",l:"MIT",t:"permissive",u:"gin-gonic.com",tags:["Go","Web"],f:["고성능 라우터","미들웨어","JSON 처리"]},
+                {n:"Echo",v:"Echo Community",l:"MIT",t:"permissive",u:"echo.labstack.com",tags:["Go","Web"],f:["경량 프레임워크","빠른 라우팅","확장성"]},
+                {n:"Nest.js",v:"Nest",l:"MIT",t:"permissive",u:"nestjs.com",tags:["TypeScript","Backend"],f:["모듈형 아키텍처","의존성 주입","TypeScript 네이티브"]},
+                {n:"Next.js",v:"Vercel",l:"MIT",t:"permissive",u:"nextjs.org",tags:["React","SSR"],f:["React 프레임워크","SSR/SSG","파일 기반 라우팅"]},
+                {n:"Nuxt.js",v:"Nuxt",l:"MIT",t:"permissive",u:"nuxt.com",tags:["Vue","SSR"],f:["Vue 프레임워크","서버 사이드 렌더링","자동 라우팅"]},
+                {n:"Svelte",v:"Rich Harris",l:"MIT",t:"permissive",u:"svelte.dev",tags:["JavaScript","Compiler"],f:["컴파일러 기반","적은 번들 크기","반응성 내장"]},
+                {n:"Remix",v:"Remix",l:"MIT",t:"permissive",u:"remix.run",tags:["React","Web"],f:["풀스택 프레임워크","중첩 라우팅","데이터 로딩"]}
+            ],
+            "CMS/포털": [
+                {n:"WordPress",v:"WordPress Foundation",l:"GPL v2",t:"copyleft",u:"wordpress.org",tags:["CMS","Blog"],f:["최대 CMS 점유율","플러그인 생태계","테마 시스템"]},
+                {n:"Drupal",v:"Drupal Association",l:"GPL v2",t:"copyleft",u:"drupal.org",tags:["CMS","Enterprise"],f:["엔터프라이즈급 CMS","모듈형 아키텍처","강력한 보안"]},
+                {n:"Joomla",v:"Open Source Matters",l:"GPL v2",t:"copyleft",u:"joomla.org",tags:["CMS","PHP"],f:["사용자 친화적","확장 기능","다국어 지원"]},
+                {n:"Ghost",v:"Ghost Foundation",l:"MIT",t:"permissive",u:"ghost.org",tags:["CMS","Blog"],f:["전문 블로그 플랫폼","마크다운 에디터","멤버십 기능"]},
+                {n:"Strapi",v:"Strapi",l:"MIT",t:"permissive",u:"strapi.io",tags:["CMS","Headless"],f:["헤드리스 CMS","REST/GraphQL API","커스터마이징"]},
+                {n:"Directus",v:"Directus",l:"GPL v3",t:"copyleft",u:"directus.io",tags:["CMS","Headless"],f:["데이터 우선 CMS","직관적 UI","DB 래퍼"]},
+                {n:"Payload CMS",v:"Payload",l:"MIT",t:"permissive",u:"payloadcms.com",tags:["CMS","Headless"],f:["TypeScript 기반","로컬 API","개발자 중심"]},
+                {n:"KeystoneJS",v:"Keystone",l:"MIT",t:"permissive",u:"keystonejs.com",tags:["CMS","GraphQL"],f:["GraphQL API","확장 가능","관리자 UI"]},
+                {n:"Grav",v:"Grav",l:"MIT",t:"permissive",u:"getgrav.org",tags:["CMS","Flat-file"],f:["파일 기반 CMS","DB 불필요","유연한 구조"]},
+                {n:"Hugo",v:"Hugo",l:"Apache 2.0",t:"permissive",u:"gohugo.io",tags:["SSG","Go"],f:["초고속 빌드","정적 사이트 생성","Go 템플릿"]},
+                {n:"Jekyll",v:"Jekyll",l:"MIT",t:"permissive",u:"jekyllrb.com",tags:["SSG","Ruby"],f:["GitHub Pages 통합","Liquid 템플릿","간단한 구조"]},
+                {n:"Gatsby",v:"Gatsby",l:"MIT",t:"permissive",u:"gatsbyjs.com",tags:["SSG","React"],f:["React 기반 SSG","GraphQL 데이터","플러그인 시스템"]}
+            ],
+            "협업/그룹웨어": [
+                {n:"Nextcloud",v:"Nextcloud GmbH",l:"AGPL",t:"copyleft",u:"nextcloud.com",tags:["협업","파일공유"],f:["파일 동기화","협업 도구","자체 호스팅"]},
+                {n:"Mattermost",v:"Mattermost Inc",l:"MIT",t:"permissive",u:"mattermost.com",tags:["협업","Chat"],f:["팀 채팅","Slack 대체","보안 중심"]},
+                {n:"Rocket.Chat",v:"Rocket.Chat",l:"MIT",t:"permissive",u:"rocket.chat",tags:["협업","Chat"],f:["실시간 채팅","옴니채널","커스터마이징"]},
+                {n:"Jitsi",v:"8x8",l:"Apache 2.0",t:"permissive",u:"jitsi.org",tags:["협업","Video"],f:["화상 회의","암호화 통신","웹 기반"]},
+                {n:"Odoo",v:"Odoo SA",l:"LGPL",t:"copyleft",u:"odoo.com",tags:["ERP","CRM"],f:["통합 비즈니스 앱","모듈형 구조","CRM/ERP"]},
+                {n:"ERPNext",v:"Frappe",l:"GPL v3",t:"copyleft",u:"erpnext.com",tags:["ERP","Business"],f:["오픈소스 ERP","제조/유통","재무 관리"]},
+                {n:"Redmine",v:"Jean-Philippe Lang",l:"GPL v2",t:"copyleft",u:"redmine.org",tags:["협업","PM"],f:["프로젝트 관리","이슈 추적","간트 차트"]},
+                {n:"Taiga",v:"Taiga Agile",l:"AGPL",t:"copyleft",u:"taiga.io",tags:["협업","Agile"],f:["애자일 관리","스크럼/칸반","사용자 스토리"]},
+                {n:"Trac",v:"Edgewall",l:"BSD",t:"permissive",u:"trac.edgewall.org",tags:["협업","이슈추적"],f:["이슈 추적","위키 통합","버전 관리"]},
+                {n:"Phabricator",v:"Phacility",l:"Apache 2.0",t:"permissive",u:"phacility.com",tags:["협업","코드리뷰"],f:["코드 리뷰","작업 관리","개발 도구 통합"]},
+                {n:"Gitea",v:"Gitea",l:"MIT",t:"permissive",u:"gitea.io",tags:["Git","Self-hosted"],f:["경량 Git 서버","자체 호스팅","Go 기반"]},
+                {n:"Gogs",v:"Gogs",l:"MIT",t:"permissive",u:"gogs.io",tags:["Git","Self-hosted"],f:["간단한 Git 서비스","낮은 리소스","크로스 플랫폼"]},
+                {n:"Loomio",v:"Loomio",l:"AGPL",t:"copyleft",u:"loomio.com",tags:["협업","의사결정"],f:["집단 의사결정","토론 플랫폼","투표 시스템"]},
+                {n:"Zulip",v:"Kandra Labs",l:"Apache 2.0",t:"permissive",u:"zulip.com",tags:["협업","Chat"],f:["스레드형 채팅","주제별 대화","검색 기능"]}
+            ],
+            "보안": [
+                {n:"OWASP ZAP",v:"OWASP",l:"Apache 2.0",t:"permissive",u:"zaproxy.org",tags:["보안","테스트"],f:["웹 취약점 스캐너","능동/수동 스캔","자동화 테스트"]},
+                {n:"Suricata",v:"OISF",l:"GPL v2",t:"copyleft",u:"suricata.io",tags:["보안","IDS"],f:["침입 탐지/방지","멀티 스레드","네트워크 모니터링"]},
+                {n:"Snort",v:"Cisco",l:"GPL v2",t:"copyleft",u:"snort.org",tags:["보안","IDS"],f:["실시간 트래픽 분석","패킷 로깅","침입 탐지"]},
+                {n:"Wazuh",v:"Wazuh Inc",l:"GPL v2",t:"copyleft",u:"wazuh.com",tags:["보안","SIEM"],f:["보안 모니터링","위협 탐지","컴플라이언스"]},
+                {n:"OpenVAS",v:"Greenbone",l:"GPL",t:"copyleft",u:"openvas.org",tags:["보안","취약점"],f:["취약점 스캐닝","포괄적 테스트","정기 업데이트"]},
+                {n:"Keycloak",v:"Red Hat",l:"Apache 2.0",t:"permissive",u:"keycloak.org",tags:["보안","IAM"],f:["ID 및 액세스 관리","SSO 지원","다중 프로토콜"]},
+                {n:"Vault",v:"HashiCorp",l:"MPL",t:"copyleft",u:"vaultproject.io",tags:["보안","Secret"],f:["비밀 정보 관리","동적 시크릿","암호화 서비스"]},
+                {n:"Wireshark",v:"Wireshark Foundation",l:"GPL v2",t:"copyleft",u:"wireshark.org",tags:["보안","Network"],f:["네트워크 분석","패킷 캡처","프로토콜 디코딩"]},
+                {n:"Nmap",v:"Nmap Project",l:"GPL",t:"copyleft",u:"nmap.org",tags:["보안","포트스캔"],f:["포트 스캐닝","네트워크 탐색","OS 감지"]},
+                {n:"Metasploit",v:"Rapid7",l:"BSD",t:"permissive",u:"metasploit.com",tags:["보안","침투테스트"],f:["침투 테스트 프레임워크","익스플로잇 개발","보안 평가"]},
+                {n:"Kali Linux",v:"Offensive Security",l:"GPL",t:"copyleft",u:"kali.org",tags:["보안","침투테스트"],f:["보안 테스트 OS","600+ 도구","디지털 포렌식"]},
+                {n:"OpenSSL",v:"OpenSSL Project",l:"Apache 2.0",t:"permissive",u:"openssl.org",tags:["보안","암호화"],f:["SSL/TLS 라이브러리","암호화 툴킷","표준 프로토콜"]},
+                {n:"Fail2ban",v:"Fail2ban",l:"GPL v2",t:"copyleft",u:"fail2ban.org",tags:["보안","방어"],f:["침입 방지","자동 차단","로그 모니터링"]},
+                {n:"ClamAV",v:"Cisco",l:"GPL v2",t:"copyleft",u:"clamav.net",tags:["보안","백신"],f:["오픈소스 백신","멀웨어 탐지","명령줄 스캐너"]},
+                {n:"OSSEC",v:"Trend Micro",l:"GPL v2",t:"copyleft",u:"ossec.net",tags:["보안","HIDS"],f:["호스트 침입 탐지","로그 분석","파일 무결성"]}
+            ],
+            "모니터링/로깅": [
+                {n:"Prometheus",v:"CNCF",l:"Apache 2.0",t:"permissive",u:"prometheus.io",tags:["모니터링","Metrics"],f:["메트릭 수집","시계열 DB","알림 시스템"]},
+                {n:"Grafana",v:"Grafana Labs",l:"AGPL",t:"copyleft",u:"grafana.com",tags:["모니터링","시각화"],f:["데이터 시각화","대시보드 구성","다중 데이터소스"]},
+                {n:"Zabbix",v:"Zabbix LLC",l:"GPL v2",t:"copyleft",u:"zabbix.com",tags:["모니터링","Enterprise"],f:["엔터프라이즈 모니터링","에이전트/에이전트리스","자동 발견"]},
+                {n:"Nagios",v:"Nagios Enterprises",l:"GPL v2",t:"copyleft",u:"nagios.org",tags:["모니터링","Alerting"],f:["인프라 모니터링","플러그인 확장","알림 시스템"]},
+                {n:"Elasticsearch",v:"Elastic",l:"SSPL",t:"copyleft",u:"elastic.co",tags:["로깅","Search"],f:["전문 검색 엔진","분산 아키텍처","실시간 분석"]},
+                {n:"Logstash",v:"Elastic",l:"SSPL",t:"copyleft",u:"elastic.co/logstash",tags:["로깅","Pipeline"],f:["로그 수집/파싱","데이터 변환","다양한 입출력"]},
+                {n:"Kibana",v:"Elastic",l:"SSPL",t:"copyleft",u:"elastic.co/kibana",tags:["로깅","시각화"],f:["로그 시각화","대시보드","데이터 탐색"]},
+                {n:"Graylog",v:"Graylog Inc",l:"SSPL",t:"copyleft",u:"graylog.org",tags:["로깅","분석"],f:["로그 관리","중앙 집중식","알림 규칙"]},
+                {n:"Fluentd",v:"CNCF",l:"Apache 2.0",t:"permissive",u:"fluentd.org",tags:["로깅","Collector"],f:["통합 로깅 레이어","플러그인 생태계","메모리 버퍼링"]},
+                {n:"Loki",v:"Grafana Labs",l:"AGPL",t:"copyleft",u:"grafana.com/loki",tags:["로깅","Prometheus-like"],f:["로그 집계","Prometheus 통합","라벨 기반 인덱싱"]},
+                {n:"Jaeger",v:"CNCF",l:"Apache 2.0",t:"permissive",u:"jaegertracing.io",tags:["Tracing","APM"],f:["분산 추적","성능 모니터링","의존성 분석"]},
+                {n:"Zipkin",v:"OpenZipkin",l:"Apache 2.0",t:"permissive",u:"zipkin.io",tags:["Tracing","APM"],f:["분산 시스템 추적","레이턴시 분석","서비스 의존성"]},
+                {n:"Netdata",v:"Netdata",l:"GPL v3",t:"copyleft",u:"netdata.cloud",tags:["모니터링","실시간"],f:["실시간 모니터링","자동 탐지","경량 에이전트"]},
+                {n:"Icinga",v:"Icinga",l:"GPL v2",t:"copyleft",u:"icinga.com",tags:["모니터링","Nagios-fork"],f:["Nagios 호환","REST API","확장 가능"]}
+            ],
+            "자동화/IaC": [
+                {n:"Ansible",v:"Red Hat",l:"GPL v3",t:"copyleft",u:"ansible.com",tags:["자동화","구성관리"],f:["에이전트리스","YAML 기반","멱등성 보장"]},
+                {n:"Terraform",v:"HashiCorp",l:"MPL",t:"copyleft",u:"terraform.io",tags:["IaC","멀티클라우드"],f:["인프라 코드화","선언적 구성","상태 관리"]},
+                {n:"Puppet",v:"Puppet",l:"Apache 2.0",t:"permissive",u:"puppet.com",tags:["자동화","구성관리"],f:["구성 관리","모델 기반","대규모 자동화"]},
+                {n:"Chef",v:"Progress",l:"Apache 2.0",t:"permissive",u:"chef.io",tags:["자동화","구성관리"],f:["인프라 자동화","Ruby DSL","쿡북 관리"]},
+                {n:"SaltStack",v:"VMware",l:"Apache 2.0",t:"permissive",u:"saltproject.io",tags:["자동화","Event-driven"],f:["이벤트 기반","원격 실행","확장 가능"]},
+                {n:"Pulumi",v:"Pulumi",l:"Apache 2.0",t:"permissive",u:"pulumi.com",tags:["IaC","프로그래밍"],f:["실제 프로그래밍 언어","클라우드 네이티브","상태 관리"]},
+                {n:"CloudFormation",v:"AWS",l:"Proprietary",t:"proprietary",u:"aws.amazon.com/cloudformation",tags:["IaC","AWS"],f:["AWS 전용 IaC","JSON/YAML 템플릿","스택 관리"]},
+                {n:"Packer",v:"HashiCorp",l:"MPL",t:"copyleft",u:"packer.io",tags:["자동화","이미지빌드"],f:["이미지 자동화","멀티 플랫폼","템플릿 기반"]},
+                {n:"Vagrant",v:"HashiCorp",l:"MIT",t:"permissive",u:"vagrantup.com",tags:["자동화","VM"],f:["개발 환경 관리","VM 자동화","프로비저닝"]},
+                {n:"CFEngine",v:"CFEngine",l:"GPL v3",t:"copyleft",u:"cfengine.com",tags:["자동화","구성관리"],f:["경량 에이전트","자율적 관리","고속 실행"]}
+            ],
+            "메시징": [
+                {n:"Kafka",v:"Apache",l:"Apache 2.0",t:"permissive",u:"kafka.apache.org",tags:["메시징","Stream"],f:["분산 스트리밍","높은 처리량","내구성 보장"]},
+                {n:"RabbitMQ",v:"VMware",l:"MPL",t:"copyleft",u:"rabbitmq.com",tags:["메시징","AMQP"],f:["메시지 브로커","다양한 프로토콜","유연한 라우팅"]},
+                {n:"Pulsar",v:"Apache",l:"Apache 2.0",t:"permissive",u:"pulsar.apache.org",tags:["메시징","Cloud"],f:["클라우드 네이티브","멀티 테넌시","계층형 스토리지"]},
+                {n:"NATS",v:"CNCF",l:"Apache 2.0",t:"permissive",u:"nats.io",tags:["메시징","경량"],f:["경량 메시징","고성능","간단한 API"]},
+                {n:"ActiveMQ",v:"Apache",l:"Apache 2.0",t:"permissive",u:"activemq.apache.org",tags:["메시징","JMS"],f:["JMS 구현","다양한 프로토콜","엔터프라이즈급"]},
+                {n:"ZeroMQ",v:"ZeroMQ",l:"MPL",t:"copyleft",u:"zeromq.org",tags:["메시징","고성능"],f:["비동기 메시징","소켓 라이브러리","브로커리스"]},
+                {n:"Apache Qpid",v:"Apache",l:"Apache 2.0",t:"permissive",u:"qpid.apache.org",tags:["메시징","AMQP"],f:["AMQP 메시징","크로스 플랫폼","다중 언어"]},
+                {n:"EMQX",v:"EMQ",l:"Apache 2.0",t:"permissive",u:"emqx.io",tags:["메시징","MQTT"],f:["MQTT 브로커","IoT 최적화","고확장성"]},
+                {n:"VerneMQ",v:"VerneMQ",l:"Apache 2.0",t:"permissive",u:"vernemq.com",tags:["메시징","MQTT"],f:["분산 MQTT 브로커","클러스터링","플러그인 확장"]}
+            ],
+            "미디어/그래픽": [
+                {n:"Blender",v:"Blender Foundation",l:"GPL v3",t:"copyleft",u:"blender.org",tags:["3D","모델링"],f:["3D 제작 도구","모델링/애니메이션","렌더링 엔진"]},
+                {n:"GIMP",v:"GIMP Team",l:"GPL v3",t:"copyleft",u:"gimp.org",tags:["그래픽","편집"],f:["이미지 편집","레이어 지원","플러그인 확장"]},
+                {n:"Inkscape",v:"Inkscape Project",l:"GPL v3",t:"copyleft",u:"inkscape.org",tags:["그래픽","벡터"],f:["벡터 그래픽","SVG 편집","드로잉 도구"]},
+                {n:"Krita",v:"KDE",l:"GPL v3",t:"copyleft",u:"krita.org",tags:["그래픽","페인팅"],f:["디지털 페인팅","브러시 엔진","애니메이션"]},
+                {n:"FFmpeg",v:"FFmpeg Team",l:"LGPL",t:"copyleft",u:"ffmpeg.org",tags:["미디어","Video"],f:["멀티미디어 프레임워크","코덱 라이브러리","포맷 변환"]},
+                {n:"VLC",v:"VideoLAN",l:"GPL v2",t:"copyleft",u:"videolan.org",tags:["미디어","Player"],f:["미디어 플레이어","모든 포맷 지원","스트리밍"]},
+                {n:"OBS Studio",v:"OBS Project",l:"GPL v2",t:"copyleft",u:"obsproject.com",tags:["미디어","방송"],f:["실시간 방송","화면 녹화","스트리밍"]},
+                {n:"Audacity",v:"Audacity Team",l:"GPL v2",t:"copyleft",u:"audacityteam.org",tags:["오디오","편집"],f:["오디오 편집","멀티트랙","효과 처리"]},
+                {n:"Kdenlive",v:"KDE",l:"GPL v3",t:"copyleft",u:"kdenlive.org",tags:["비디오","편집"],f:["비디오 편집","타임라인","효과/전환"]},
+                {n:"OpenShot",v:"OpenShot Studios",l:"GPL v3",t:"copyleft",u:"openshot.org",tags:["비디오","편집"],f:["사용자 친화적","3D 애니메이션","무제한 트랙"]},
+                {n:"DaVinci Resolve",v:"Blackmagic",l:"Proprietary",t:"proprietary",u:"blackmagicdesign.com",tags:["비디오","전문편집"],f:["전문 편집","컬러 그레이딩","VFX"]},
+                {n:"Shotcut",v:"Meltytech",l:"GPL v3",t:"copyleft",u:"shotcut.org",tags:["비디오","편집"],f:["크로스 플랫폼","네이티브 편집","필터 지원"]}
+            ],
+            "IoT/엣지": [
+                {n:"Mosquitto",v:"Eclipse",l:"EPL",t:"permissive",u:"mosquitto.org",tags:["IoT","MQTT"],f:["경량 MQTT 브로커","IoT 메시징","낮은 리소스"]},
+                {n:"Node-RED",v:"OpenJS Foundation",l:"Apache 2.0",t:"permissive",u:"nodered.org",tags:["IoT","Flow"],f:["플로우 기반 프로그래밍","비주얼 와이어링","IoT 통합"]},
+                {n:"ThingsBoard",v:"ThingsBoard Inc",l:"Apache 2.0",t:"permissive",u:"thingsboard.io",tags:["IoT","Platform"],f:["IoT 플랫폼","디바이스 관리","데이터 시각화"]},
+                {n:"Home Assistant",v:"Home Assistant",l:"Apache 2.0",t:"permissive",u:"home-assistant.io",tags:["IoT","Home"],f:["홈 자동화","2000+ 통합","프라이버시 중심"]},
+                {n:"EdgeX Foundry",v:"Linux Foundation",l:"Apache 2.0",t:"permissive",u:"edgexfoundry.org",tags:["IoT","Edge"],f:["엣지 컴퓨팅","마이크로서비스","벤더 중립"]},
+                {n:"KubeEdge",v:"CNCF",l:"Apache 2.0",t:"permissive",u:"kubeedge.io",tags:["IoT","K8s"],f:["K8s 엣지 확장","클라우드-엣지 동기화","경량 런타임"]},
+                {n:"OpenThread",v:"Google",l:"BSD",t:"permissive",u:"openthread.io",tags:["IoT","Mesh"],f:["Thread 네트워킹","메시 프로토콜","저전력"]},
+                {n:"Zephyr",v:"Linux Foundation",l:"Apache 2.0",t:"permissive",u:"zephyrproject.org",tags:["IoT","RTOS"],f:["실시간 OS","모듈형 커널","보드 지원"]},
+                {n:"FreeRTOS",v:"Amazon",l:"MIT",t:"permissive",u:"freertos.org",tags:["IoT","RTOS"],f:["실시간 커널","임베디드 시스템","AWS 통합"]},
+                {n:"RIOT OS",v:"RIOT",l:"LGPL",t:"copyleft",u:"riot-os.org",tags:["IoT","OS"],f:["IoT 운영체제","표준 API","네트워크 스택"]}
+            ],
+            "블록체인": [
+                {n:"Ethereum",v:"Ethereum Foundation",l:"GPL v3",t:"copyleft",u:"ethereum.org",tags:["블록체인","스마트컨트랙트"],f:["스마트 컨트랙트","탈중앙화 앱","EVM"]},
+                {n:"Bitcoin Core",v:"Bitcoin",l:"MIT",t:"permissive",u:"bitcoin.org",tags:["블록체인","암호화폐"],f:["암호화폐","P2P 네트워크","작업 증명"]},
+                {n:"Hyperledger Fabric",v:"Linux Foundation",l:"Apache 2.0",t:"permissive",u:"hyperledger.org/fabric",tags:["블록체인","Enterprise"],f:["프라이빗 블록체인","모듈형 아키텍처","엔터프라이즈급"]},
+                {n:"Hyperledger Besu",v:"Linux Foundation",l:"Apache 2.0",t:"permissive",u:"hyperledger.org/besu",tags:["블록체인","Ethereum"],f:["엔터프라이즈 이더리움","퍼블릭/프라이빗","PoA 합의"]},
+                {n:"Quorum",v:"ConsenSys",l:"Apache 2.0",t:"permissive",u:"consensys.net/quorum",tags:["블록체인","Enterprise"],f:["프라이빗 트랜잭션","고성능","기업용 이더리움"]},
+                {n:"Corda",v:"R3",l:"Apache 2.0",t:"permissive",u:"corda.net",tags:["블록체인","금융"],f:["금융 특화","프라이버시","스마트 컨트랙트"]},
+                {n:"IPFS",v:"Protocol Labs",l:"MIT",t:"permissive",u:"ipfs.tech",tags:["블록체인","Storage"],f:["분산 파일 시스템","콘텐츠 주소 지정","P2P 스토리지"]},
+                {n:"Polkadot",v:"Web3 Foundation",l:"GPL v3",t:"copyleft",u:"polkadot.network",tags:["블록체인","멀티체인"],f:["멀티체인 플랫폼","상호 운용성","파라체인"]}
+            ]
+            };
+        }
+
+        // 실제 사용할 솔루션 데이터 - 로컬 스토리지에서 로드 또는 기본값
+        const solutions = loadSolutions();
+
+        const licenseCompat = {
+            "Apache 2.0": { ok: ["MIT", "BSD", "GPL v3", "LGPL"], no: ["GPL v2"] },
+            "MIT": { ok: ["모든 라이선스"], no: [] },
+            "GPL v2": { ok: ["GPL v2", "LGPL"], no: ["Apache 2.0", "GPL v3"] },
+            "GPL v3": { ok: ["GPL v3", "LGPL", "Apache 2.0", "MIT", "BSD"], no: ["GPL v2"] },
+            "BSD": { ok: ["모든 라이선스"], no: [] }
+        };
+
+        let allSols = [];
+        let selected = [];
+        let myStack = [];
+
+        function flatten() {
+            allSols = [];
+            for (const [cat, sols] of Object.entries(solutions)) {
+                sols.forEach(s => allSols.push({...s, cat}));
+            }
+        }
+
+        function checkCompat(l1, l2) {
+            if (l1 === l2) return 'yes';
+            const c = licenseCompat[l1];
+            if (!c) return 'maybe';
+            if (c.ok.includes(l2) || c.ok.includes("모든 라이선스")) return 'yes';
+            if (c.no.includes(l2)) return 'no';
+            return 'maybe';
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            if (tab === 'explorer') {
+                document.querySelector('.tab-btn:first-child').classList.add('active');
+                document.getElementById('explorerTab').classList.add('active');
+            } else {
+                document.querySelector('.tab-btn:last-child').classList.add('active');
+                document.getElementById('builderTab').classList.add('active');
+            }
+        }
+
+        function render(sols = allSols) {
+            const grid = document.getElementById('solutionsGrid');
+            grid.innerHTML = sols.map(s => `
+                <div class="solution-card">
+                    <div class="solution-header">
+                        <div style="flex:1">
+                            <div class="solution-name">${s.n}</div>
+                            <div class="solution-vendor">${s.v}</div>
+                        </div>
+                        <input type="checkbox" class="compare-checkbox"
+                               onchange="toggleCompare('${s.n}')"
+                               ${selected.some(x => x.n === s.n) ? 'checked' : ''}>
+                    </div>
+                    <span class="license-badge license-${s.t}">${s.l}</span>
+                    <div class="solution-url">🔗 <a href="https://${s.u}" target="_blank">${s.u}</a></div>
+                    <div class="tags-section">${s.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+                    ${s.f ? `
+                    <div class="features-section">
+                        <div class="features-title">주요 특징</div>
+                        <ul class="features-list">
+                            ${s.f.map(feature => `<li>${feature}</li>`).join('')}
+                        </ul>
+                    </div>
+                    ` : ''}
+                    ${s.p && s.p.length > 0 ? `
+                    <div class="providers-section">
+                        <div class="providers-title">서비스/기술지원 기업</div>
+                        <div class="providers-list">${s.p.join(', ')}</div>
+                    </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        function toggleCompare(name) {
+            const sol = allSols.find(s => s.n === name);
+            if (selected.some(s => s.n === name)) {
+                selected = selected.filter(s => s.n !== name);
+            } else {
+                if (selected.length >= 4) {
+                    alert('최대 4개까지 비교할 수 있습니다.');
+                    render(allSols);
+                    return;
+                }
+                selected.push(sol);
+            }
+            updateComparePanel();
+            updateStats();
+        }
+
+        function updateComparePanel() {
+            const panel = document.getElementById('comparePanel');
+            const items = document.getElementById('compareItems');
+            const count = document.getElementById('compareCount');
+            const btn = document.getElementById('compareBtn');
+
+            count.textContent = selected.length;
+            btn.disabled = selected.length < 2;
+
+            if (selected.length > 0) {
+                panel.classList.add('active');
+                items.innerHTML = selected.map(s => `
+                    <div class="compare-item">
+                        <span>${s.n}</span>
+                        <button class="remove-compare" onclick="removeCompare('${s.n}')">×</button>
+                    </div>
+                `).join('');
+            } else {
+                panel.classList.remove('active');
+            }
+        }
+
+        function removeCompare(name) {
+            selected = selected.filter(s => s.n !== name);
+            updateComparePanel();
+            updateStats();
+            render(allSols);
+        }
+
+        function showComparison() {
+            const modal = document.getElementById('comparisonModal');
+            const content = document.getElementById('comparisonContent');
+
+            let incompatible = [];
+            for (let i = 0; i < selected.length; i++) {
+                for (let j = i + 1; j < selected.length; j++) {
+                    if (checkCompat(selected[i].l, selected[j].l) === 'no') {
+                        incompatible.push(`${selected[i].n} (${selected[i].l}) ↔ ${selected[j].n} (${selected[j].l})`);
+                    }
+                }
+            }
+
+            const alertClass = incompatible.length === 0 ? 'alert-success' : 'alert-warning';
+            const alertMsg = incompatible.length === 0
+                ? '✅ 선택한 모든 솔루션의 라이선스가 서로 호환됩니다.'
+                : `⚠️ 다음 조합은 라이선스가 호환되지 않습니다:<br>${incompatible.join('<br>')}`;
+
+            content.innerHTML = `
+                <div class="alert-box ${alertClass}">${alertMsg}</div>
+
+                <h3 style="color: #1e3c72; margin: 30px 0 20px 0;">⚖️ 라이선스 호환성 매트릭스</h3>
+                <div class="license-matrix">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>솔루션</th>
+                                ${selected.map(s => `<th>${s.n}<br><small>(${s.l})</small></th>`).join('')}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${selected.map(s1 => `
+                                <tr>
+                                    <th>${s1.n}<br><small>(${s1.l})</small></th>
+                                    ${selected.map(s2 => {
+                                        const c = checkCompat(s1.l, s2.l);
+                                        const cls = c === 'yes' ? 'compat-yes' : c === 'no' ? 'compat-no' : 'compat-maybe';
+                                        const txt = c === 'yes' ? '✓ 호환' : c === 'no' ? '✗ 비호환' : '? 검토';
+                                        const tooltip = c === 'maybe' ? 'title="호환성 정보가 명확하지 않습니다. 각 라이선스의 세부 조건을 검토하거나 법률 전문가와 상담하세요."' : '';
+                                        return `<td class="${cls}" ${tooltip}>${txt}</td>`;
+                                    }).join('')}
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                    <div style="margin-top: 15px; padding: 12px; background: #f5f5f5; border-radius: 8px; font-size: 13px; color: #555;">
+                        <strong>💡 호환성 판정 기준:</strong><br>
+                        • <span style="color: #2e7d32; font-weight: bold;">✓ 호환</span>: 라이선스가 동일하거나 명시적으로 호환 가능<br>
+                        • <span style="color: #c62828; font-weight: bold;">✗ 비호환</span>: 라이선스 조항이 상충되어 함께 사용 불가<br>
+                        • <span style="color: #e65100; font-weight: bold;">? 검토</span>: 호환성 정보가 불명확하여 추가 검토 필요 (사용 방식, 배포 형태 등에 따라 달라질 수 있음)
+                    </div>
+                </div>
+
+                <h3 style="color: #1e3c72; margin: 30px 0 20px 0;">📊 기본 정보 비교</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>항목</th>
+                            ${selected.map(s => `<th>${s.n}</th>`).join('')}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>카테고리</strong></td>
+                            ${selected.map(s => `<td>${s.cat}</td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td><strong>제공사</strong></td>
+                            ${selected.map(s => `<td>${s.v}</td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td><strong>라이선스</strong></td>
+                            ${selected.map(s => `<td><span class="license-badge license-${s.t}">${s.l}</span></td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td><strong>라이선스 유형</strong></td>
+                            ${selected.map(s => {
+                                const types = {permissive: '허용적', copyleft: '카피레프트', proprietary: '독점'};
+                                return `<td>${types[s.t] || s.t}</td>`;
+                            }).join('')}
+                        </tr>
+                        <tr>
+                            <td><strong>웹사이트</strong></td>
+                            ${selected.map(s => `<td><a href="https://${s.u}" target="_blank">${s.u}</a></td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td><strong>주요 태그</strong></td>
+                            ${selected.map(s => `<td>${s.tags.join(', ')}</td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td><strong>주요 특징</strong></td>
+                            ${selected.map(s => `<td><ul style="margin:0; padding-left:20px; text-align:left;">${s.f ? s.f.map(feature => `<li style="margin:4px 0;">${feature}</li>`).join('') : '<li>정보 없음</li>'}</ul></td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td><strong>서비스/기술지원 기업</strong></td>
+                            ${selected.map(s => `<td style="background:#f0fff4;">${s.p && s.p.length > 0 ? s.p.join(', ') : '<span style="color:#999;">정보 없음</span>'}</td>`).join('')}
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+
+            modal.classList.add('active');
+        }
+
+        function closeComparison() {
+            document.getElementById('comparisonModal').classList.remove('active');
+        }
+
+        function renderNav() {
+            const nav = document.getElementById('categoryNav');
+            const cats = ['전체', ...Object.keys(solutions)];
+            nav.innerHTML = cats.map(c =>
+                `<button class="category-btn ${c === '전체' ? 'active' : ''}" onclick="filter('${c}')">${c}</button>`
+            ).join('');
+        }
+
+        function filter(cat) {
+            document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            const filtered = cat === '전체' ? allSols : allSols.filter(s => s.cat === cat);
+            render(filtered);
+        }
+
+        function updateStats() {
+            const vendors = new Set(allSols.map(s => s.v));
+            document.getElementById('totalSolutions').textContent = allSols.length;
+            document.getElementById('totalCategories').textContent = Object.keys(solutions).length;
+            document.getElementById('totalVendors').textContent = vendors.size;
+            document.getElementById('selectedCount').textContent = selected.length;
+        }
+
+        // 스택 빌더 함수들
+        function renderStackBuilder() {
+            const container = document.getElementById('stackCategoriesContainer');
+            const categories = Object.keys(solutions);
+
+            container.innerHTML = categories.map(cat => `
+                <div class="stack-category-section">
+                    <div class="stack-category-header" onclick="toggleCategory('${cat}')">
+                        <div class="stack-category-title">${cat}</div>
+                        <div class="stack-category-badge">${solutions[cat].length}개</div>
+                    </div>
+                    <div class="stack-solutions-list" id="category-${cat.replace(/\//g, '-')}">
+                        ${solutions[cat].map(sol => `
+                            <div class="stack-solution-item" id="stack-sol-${sol.n}">
+                                <div style="cursor:pointer; flex:1;" onclick="showSolutionPreview('${cat}', '${sol.n.replace(/'/g, "\\'")}')">
+                                    <strong>${sol.n}</strong>
+                                    <div style="font-size: 0.85em; color: #666;">${sol.v}</div>
+                                </div>
+                                <button class="add-to-stack-btn" onclick="addToStack('${cat}', '${sol.n}')">추가</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleCategory(cat) {
+            const list = document.getElementById(`category-${cat.replace(/\//g, '-')}`);
+            list.classList.toggle('active');
+        }
+
+        function addToStack(category, solName) {
+            const sol = solutions[category].find(s => s.n === solName);
+            if (!sol) return;
+
+            // 같은 솔루션이 이미 있으면 추가하지 않음
+            if (myStack.some(s => s.n === solName)) {
+                alert('이미 스택에 추가된 솔루션입니다.');
+                return;
+            }
+
+            const solWithCat = {...sol, cat: category};
+            myStack.push(solWithCat);
+
+            // UI 업데이트
+            document.getElementById(`stack-sol-${solName}`).classList.add('selected');
+            updateMyStack();
+        }
+
+        function removeFromStack(solName) {
+            myStack = myStack.filter(s => s.n !== solName);
+            document.getElementById(`stack-sol-${solName}`)?.classList.remove('selected');
+            updateMyStack();
+        }
+
+        function updateMyStack() {
+            const container = document.getElementById('myStackItems');
+            const countEl = document.getElementById('stackCount');
+            const checkBtn = document.getElementById('checkCompatBtn');
+            const exportBtn = document.getElementById('exportStackBtn');
+            const clearBtn = document.getElementById('clearStackBtn');
+
+            countEl.textContent = myStack.length;
+
+            if (myStack.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-stack-message">
+                        <div class="emoji">📦</div>
+                        <p>카테고리에서 솔루션을 선택하여<br>나만의 기술 스택을 구성하세요!</p>
+                    </div>
+                `;
+                checkBtn.disabled = true;
+                exportBtn.disabled = true;
+                clearBtn.disabled = true;
+            } else {
+                container.innerHTML = myStack.map(s => `
+                    <div class="stack-item" id="stack-item-${s.n.replace(/[^a-zA-Z0-9]/g, '_')}" onclick="showSolutionDetail('${s.n.replace(/'/g, "\\'")}')">
+                        <div class="stack-item-header">
+                            <div>
+                                <div class="stack-item-name">${s.n}</div>
+                                <div class="stack-item-category">${s.cat}</div>
+                            </div>
+                            <button class="remove-stack-btn" onclick="event.stopPropagation(); removeFromStack('${s.n}')">×</button>
+                        </div>
+                        <span class="license-badge license-${s.t}" style="margin-top: 8px; display: inline-block;">${s.l}</span>
+                        ${s.p && s.p.length > 0 ? `<div style="font-size:0.75em; color:#27ae60; margin-top:6px;">📞 ${s.p[0]}${s.p.length > 1 ? ' 외 ' + (s.p.length - 1) + '개' : ''}</div>` : ''}
+                    </div>
+                `).join('');
+
+                checkBtn.disabled = myStack.length < 2;
+                exportBtn.disabled = false;
+                clearBtn.disabled = false;
+            }
+            // 상세 정보 패널 숨기기
+            closeSolutionDetail();
+        }
+
+        // 솔루션 상세 정보 표시
+        function showSolutionDetail(solName) {
+            const sol = myStack.find(s => s.n === solName);
+            if (!sol) return;
+
+            // 모든 스택 아이템에서 active 클래스 제거
+            document.querySelectorAll('.stack-item').forEach(item => item.classList.remove('active'));
+
+            // 선택된 아이템에 active 클래스 추가
+            const activeItem = document.getElementById(`stack-item-${solName.replace(/[^a-zA-Z0-9]/g, '_')}`);
+            if (activeItem) activeItem.classList.add('active');
+
+            const panel = document.getElementById('solutionDetailPanel');
+            const content = document.getElementById('solutionDetailContent');
+
+            const licenseTypes = {permissive: '허용적', copyleft: '카피레프트', proprietary: '독점'};
+
+            content.innerHTML = `
+                <div class="detail-solution-name">${sol.n}</div>
+                <div class="detail-vendor">👤 ${sol.v}</div>
+
+                <div class="detail-section">
+                    <span class="license-badge license-${sol.t}">${sol.l}</span>
+                    <span style="font-size:0.8em; color:#666; margin-left:8px;">(${licenseTypes[sol.t] || sol.t})</span>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">🏷️ 카테고리</div>
+                    <span style="font-size:0.9em; color:#1e3c72; font-weight:600;">${sol.cat}</span>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">🏷️ 태그</div>
+                    <div class="detail-tags">
+                        ${sol.tags.map(t => `<span class="detail-tag">${t}</span>`).join('')}
+                    </div>
+                </div>
+
+                ${sol.f && sol.f.length > 0 ? `
+                <div class="detail-section">
+                    <div class="detail-section-title">✨ 주요 특징</div>
+                    <ul class="detail-features">
+                        ${sol.f.map(feature => `<li>${feature}</li>`).join('')}
+                    </ul>
+                </div>
+                ` : ''}
+
+                ${sol.p && sol.p.length > 0 ? `
+                <div class="detail-section">
+                    <div class="detail-section-title">🏢 서비스/기술지원 기업</div>
+                    <div class="detail-providers">${sol.p.join(', ')}</div>
+                </div>
+                ` : ''}
+
+                <a href="https://${sol.u}" target="_blank" class="detail-link">🔗 공식 웹사이트 방문</a>
+            `;
+
+            panel.style.display = 'block';
+        }
+
+        // 솔루션 상세 정보 닫기
+        function closeSolutionDetail() {
+            const panel = document.getElementById('solutionDetailPanel');
+            if (panel) panel.style.display = 'none';
+            document.querySelectorAll('.stack-item').forEach(item => item.classList.remove('active'));
+            document.querySelectorAll('.stack-solution-item').forEach(item => item.classList.remove('previewing'));
+        }
+
+        // 카테고리 목록에서 솔루션 미리보기
+        function showSolutionPreview(category, solName) {
+            const sol = solutions[category].find(s => s.n === solName);
+            if (!sol) return;
+
+            // 모든 솔루션 아이템에서 previewing 클래스 제거
+            document.querySelectorAll('.stack-solution-item').forEach(item => item.classList.remove('previewing'));
+            document.querySelectorAll('.stack-item').forEach(item => item.classList.remove('active'));
+
+            // 선택된 아이템에 previewing 클래스 추가
+            const previewItem = document.getElementById(`stack-sol-${solName}`);
+            if (previewItem) previewItem.classList.add('previewing');
+
+            const panel = document.getElementById('solutionDetailPanel');
+            const content = document.getElementById('solutionDetailContent');
+
+            const licenseTypes = {permissive: '허용적', copyleft: '카피레프트', proprietary: '독점'};
+
+            content.innerHTML = `
+                <div class="detail-solution-name">${sol.n}</div>
+                <div class="detail-vendor">👤 ${sol.v}</div>
+
+                <div class="detail-section">
+                    <span class="license-badge license-${sol.t}">${sol.l}</span>
+                    <span style="font-size:0.8em; color:#666; margin-left:8px;">(${licenseTypes[sol.t] || sol.t})</span>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">🏷️ 카테고리</div>
+                    <span style="font-size:0.9em; color:#1e3c72; font-weight:600;">${category}</span>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">🏷️ 태그</div>
+                    <div class="detail-tags">
+                        ${sol.tags.map(t => `<span class="detail-tag">${t}</span>`).join('')}
+                    </div>
+                </div>
+
+                ${sol.f && sol.f.length > 0 ? `
+                <div class="detail-section">
+                    <div class="detail-section-title">✨ 주요 특징</div>
+                    <ul class="detail-features">
+                        ${sol.f.map(feature => `<li>${feature}</li>`).join('')}
+                    </ul>
+                </div>
+                ` : ''}
+
+                ${sol.p && sol.p.length > 0 ? `
+                <div class="detail-section">
+                    <div class="detail-section-title">🏢 서비스/기술지원 기업</div>
+                    <div class="detail-providers">${sol.p.join(', ')}</div>
+                </div>
+                ` : ''}
+
+                <div style="display:flex; gap:10px; margin-top:12px;">
+                    <a href="https://${sol.u}" target="_blank" class="detail-link">🔗 공식 웹사이트</a>
+                    <button class="detail-link" style="border:none; cursor:pointer;" onclick="addToStack('${category}', '${sol.n.replace(/'/g, "\\'")}')">➕ 스택에 추가</button>
+                </div>
+            `;
+
+            panel.style.display = 'block';
+        }
+
+        function checkStackCompatibility() {
+            if (myStack.length < 2) return;
+
+            // 기존 비교 모달 활용
+            selected = [...myStack];
+            showComparison();
+            selected = [];
+            updateComparePanel();
+        }
+
+        function exportStack() {
+            if (myStack.length === 0) return;
+
+            const exportData = {
+                title: "나의 기술 스택",
+                createdAt: new Date().toISOString(),
+                totalSolutions: myStack.length,
+                categories: {},
+                solutions: myStack.map(s => ({
+                    name: s.n,
+                    category: s.cat,
+                    vendor: s.v,
+                    license: s.l,
+                    licenseType: s.t,
+                    url: s.u,
+                    tags: s.tags,
+                    features: s.f
+                }))
+            };
+
+            // 카테고리별 그룹화
+            myStack.forEach(s => {
+                if (!exportData.categories[s.cat]) {
+                    exportData.categories[s.cat] = [];
+                }
+                exportData.categories[s.cat].push(s.n);
+            });
+
+            // JSON 파일로 다운로드
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `my-tech-stack-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            alert('기술 스택 구성이 JSON 파일로 저장되었습니다!');
+        }
+
+        function clearStack() {
+            if (!confirm('전체 스택을 초기화하시겠습니까?')) return;
+
+            myStack.forEach(s => {
+                document.getElementById(`stack-sol-${s.n}`)?.classList.remove('selected');
+            });
+
+            myStack = [];
+            updateMyStack();
+        }
+
+        // 초기화
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('searchBox').addEventListener('input', (e) => {
+                const term = e.target.value.toLowerCase();
+                const filtered = allSols.filter(s =>
+                    s.n.toLowerCase().includes(term) ||
+                    s.v.toLowerCase().includes(term) ||
+                    s.l.toLowerCase().includes(term) ||
+                    s.tags.some(t => t.toLowerCase().includes(term))
+                );
+                render(filtered);
+            });
+        });
+
+        flatten();
+        renderNav();
+        render();
+        updateStats();
+        renderStackBuilder();
+        updateMyStack();
+    </script>
+</body>
+</html>
