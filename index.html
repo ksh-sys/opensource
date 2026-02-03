@@ -234,11 +234,21 @@
         .providers-list {
             font-size: 0.8em;
             color: #555;
-            line-height: 1.5;
+            line-height: 1.8;
             background: #f0fff4;
             padding: 6px 10px;
             border-radius: 6px;
             border-left: 3px solid #27ae60;
+        }
+        .provider-link {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .provider-link:hover {
+            color: #1e8449;
+            text-decoration: underline;
         }
         /* 솔루션 상세 정보 패널 */
         .solution-detail-panel {
@@ -1128,6 +1138,66 @@
             };
         }
 
+        // 서비스/기술지원 기업 URL 매핑
+        const providerUrls = {
+            "락플레이스": "https://www.rockplace.co.kr",
+            "오픈소스컨설팅": "https://www.osci.kr",
+            "맨텍": "https://www.mantech.co.kr",
+            "이노그리드": "https://www.innogrid.com",
+            "나무기술": "https://www.namutech.co.kr",
+            "한컴위드": "https://www.hancomwith.com",
+            "오에스비씨": "https://www.osbc.co.kr",
+            "인포믹스": "https://www.infomix.co.kr",
+            "수세코리아": "https://www.suse.com/ko-kr",
+            "레드햇코리아": "https://www.redhat.com/ko",
+            "티맥스소프트": "https://www.tmaxsoft.com",
+            "티맥스A&C": "https://www.tmaxanc.com",
+            "티맥스에이앤씨": "https://www.tmaxanc.com",
+            "티맥스데이터": "https://www.tmaxdata.com",
+            "한글과컴퓨터": "https://www.hancom.com",
+            "인베슘": "https://www.invesume.com",
+            "비트나인": "https://bitnine.net",
+            "엑셈": "https://www.ex-em.com",
+            "실크로드소프트": "https://www.silkroad.co.kr",
+            "코난테크놀로지": "https://www.konantech.com",
+            "포스트원": "https://www.postone.co.kr",
+            "엔코아": "https://www.encore.co.kr",
+            "큐브리드": "https://www.cubrid.com",
+            "NHN": "https://www.nhn.com",
+            "알티베이스": "https://www.altibase.com",
+            "선재소프트": "https://www.sunjesoft.com",
+            "리얼타임테크": "https://www.realtimetech.co.kr",
+            "오픈나루": "https://www.opennaru.com",
+            "클라우데라": "https://www.cloudera.com",
+            "그루터": "https://www.gruter.com",
+            "데이터브릭스": "https://www.databricks.com",
+            "컨플루언트": "https://www.confluent.io",
+            "솔트룩스": "https://www.saltlux.com",
+            "마인즈랩": "https://www.mindslab.ai",
+            "모두의연구소": "https://modulabs.co.kr",
+            "업스테이지": "https://www.upstage.ai",
+            "카카오브레인": "https://www.kakaobrain.com",
+            "인포그랩": "https://www.infograb.net",
+            "스패로우": "https://www.sparrowfasoo.com",
+            "피보탈": "https://www.pivotal.io",
+            "XE커뮤니티": "https://www.xpressengine.io",
+            "라이믹스커뮤니티": "https://rhymix.org",
+            "오두코리아": "https://odookorea.com",
+            "포스원": "https://www.postone.co.kr",
+            "시큐아이": "https://www.secui.com",
+            "엘라스틱코리아": "https://www.elastic.co/kr",
+            "LG CNS": "https://www.lgcns.com",
+            "한국정보화진흥원": "https://www.nia.or.kr",
+            "AWS코리아": "https://aws.amazon.com/ko",
+            "블로코": "https://www.blocko.io",
+            "헥슬란트": "https://www.hexlant.com",
+            "아이콘루프": "https://www.iconloop.com",
+            "삼성SDS": "https://www.samsungsds.com",
+            "클라우드네이티브": "https://www.cloudnative.co.kr",
+            "아이티데이타": "https://www.itdata.co.kr",
+            "케이디시스템": "https://www.kdsystem.co.kr"
+        };
+
         // 실제 사용할 솔루션 데이터 - 로컬 스토리지에서 로드 또는 기본값
         const solutions = loadSolutions();
 
@@ -1199,7 +1269,7 @@
                     ${s.p && s.p.length > 0 ? `
                     <div class="providers-section">
                         <div class="providers-title">서비스/기술지원 기업</div>
-                        <div class="providers-list">${s.p.join(', ')}</div>
+                        <div class="providers-list">${s.p.map(p => providerUrls[p] ? `<a href="${providerUrls[p]}" target="_blank" class="provider-link">${p}</a>` : p).join(', ')}</div>
                     </div>
                     ` : ''}
                 </div>
