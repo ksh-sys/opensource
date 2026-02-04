@@ -1,0 +1,2080 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 오픈소스 솔루션 가이드 2025</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Malgun Gothic', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #1e3c72;
+        }
+        .header h1 {
+            color: #1e3c72;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .tab-navigation {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+            border-bottom: 2px solid #e0e0e0;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 15px 40px;
+            background: white;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+        .tab-btn:hover {
+            color: #1e3c72;
+            background: #f8f9fa;
+        }
+        .tab-btn.active {
+            color: #1e3c72;
+            border-bottom-color: #1e3c72;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .search-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .search-box {
+            width: 100%;
+            max-width: 600px;
+            padding: 15px;
+            font-size: 1.1em;
+            border: 2px solid #1e3c72;
+            border-radius: 25px;
+            outline: none;
+        }
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        .stat-card {
+            text-align: center;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .stat-number {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #1e3c72;
+        }
+        .stat-label {
+            font-size: 0.85em;
+            color: #666;
+        }
+        .view-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .view-btn {
+            padding: 8px 20px;
+            border: 2px solid #1e3c72;
+            background: white;
+            color: #1e3c72;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .view-btn.active, .view-btn:hover {
+            background: #1e3c72;
+            color: white;
+        }
+        /* 카테고리 탭 네비게이션 - 깔끔한 탭 스타일 */
+        .category-tabs-container {
+            margin-bottom: 25px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+        }
+        .category-tabs-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .category-tabs-title {
+            font-weight: 600;
+            color: #1e3c72;
+            font-size: 0.95em;
+        }
+        .category-count-info {
+            font-size: 0.85em;
+            color: #666;
+        }
+        .category-tabs {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .category-tab {
+            padding: 10px 18px;
+            border: none;
+            background: white;
+            color: #555;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-weight: 500;
+            font-size: 0.9em;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .category-tab:hover {
+            background: #e3f2fd;
+            color: #1e3c72;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+        }
+        .category-tab.active {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(30, 60, 114, 0.3);
+        }
+        .category-tab .cat-count {
+            background: rgba(0,0,0,0.1);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+        .category-tab.active .cat-count {
+            background: rgba(255,255,255,0.25);
+        }
+
+        /* 기존 호환성 위해 유지 */
+        .category-nav {
+            display: none;
+        }
+        .category-btn {
+            display: none;
+        }
+
+        /* 컴팩트 뷰 (기본) - 개선된 카드 스타일 */
+        .solutions-grid.compact-view {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        .compact-view .solution-card {
+            background: white;
+            border: 1px solid #e8e8e8;
+            border-radius: 12px;
+            padding: 16px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .compact-view .solution-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(30, 60, 114, 0.15);
+            border-color: #1e3c72;
+        }
+        .compact-view .solution-card.expanded {
+            border-color: #1e3c72;
+            box-shadow: 0 8px 25px rgba(30, 60, 114, 0.15);
+        }
+        .compact-view .solution-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .compact-view .solution-name {
+            font-weight: 700;
+            font-size: 1.05em;
+            color: #1e3c72;
+            margin-bottom: 4px;
+        }
+        .compact-view .solution-vendor {
+            color: #777;
+            font-size: 0.8em;
+        }
+        .compact-view .license-badge {
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.75em;
+            font-weight: 600;
+        }
+        .compact-view .solution-meta {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .compact-view .tag {
+            padding: 3px 8px;
+            background: #e3f2fd;
+            color: #1976d2;
+            border-radius: 12px;
+            font-size: 0.7em;
+            font-weight: 500;
+        }
+        .compact-view .providers-count {
+            font-size: 0.75em;
+            color: #27ae60;
+            background: #e8f5e9;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        .compact-view .expand-indicator {
+            font-size: 0.7em;
+            color: #aaa;
+            margin-left: auto;
+            transition: all 0.3s ease;
+            background: #f5f5f5;
+            padding: 3px 8px;
+            border-radius: 10px;
+        }
+        .compact-view .solution-card:hover .expand-indicator {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        .compact-view .solution-card.expanded .expand-indicator {
+            background: #1e3c72;
+            color: white;
+        }
+        .compact-view .solution-details {
+            display: none;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed #e0e0e0;
+            animation: fadeIn 0.3s ease;
+        }
+        .compact-view .solution-card.expanded .solution-details {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 상세 뷰 - 개선된 스타일 */
+        .solutions-grid.detailed-view {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 20px;
+        }
+        .detailed-view .solution-card {
+            background: white;
+            border: 1px solid #e8e8e8;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .detailed-view .solution-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(30, 60, 114, 0.12);
+            border-color: #1e3c72;
+        }
+        .detailed-view .solution-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 12px;
+        }
+        .detailed-view .solution-name {
+            font-weight: 700;
+            font-size: 1.2em;
+            color: #1e3c72;
+            margin-bottom: 4px;
+        }
+        .detailed-view .solution-vendor {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        /* 리스트 뷰 - 개선된 스타일 */
+        .solutions-grid.list-view {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .list-view .solution-card {
+            background: white;
+            border: 1px solid #e8e8e8;
+            border-radius: 8px;
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            transition: all 0.2s ease;
+        }
+        .list-view .solution-card:hover {
+            background: linear-gradient(90deg, #f8f9fa 0%, white 100%);
+            border-color: #1e3c72;
+            padding-left: 22px;
+        }
+        .list-view .solution-name {
+            font-weight: 600;
+            color: #1e3c72;
+            min-width: 180px;
+            font-size: 0.95em;
+        }
+        .list-view .solution-vendor {
+            color: #666;
+            font-size: 0.85em;
+            min-width: 130px;
+        }
+        .list-view .license-badge {
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 600;
+        }
+        .list-view .tags-section {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+        .list-view .tag {
+            padding: 3px 8px;
+            background: #e3f2fd;
+            color: #1976d2;
+            border-radius: 10px;
+            font-size: 0.72em;
+            font-weight: 500;
+        }
+        .list-view .providers-info {
+            font-size: 0.8em;
+            color: #27ae60;
+            font-weight: 500;
+        }
+
+        .license-permissive { background: #e8f5e9; color: #2e7d32; }
+        .license-copyleft { background: #fff3e0; color: #e65100; }
+        .license-proprietary { background: #fce4ec; color: #c2185b; }
+
+        .solution-url {
+            font-size: 0.8em;
+            color: #2a5298;
+            margin-top: 8px;
+        }
+        .solution-url a {
+            color: #2a5298;
+            text-decoration: none;
+        }
+        .solution-url a:hover {
+            text-decoration: underline;
+        }
+        .tags-section {
+            margin-top: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .tag {
+            padding: 3px 8px;
+            background: #e3f2fd;
+            color: #1976d2;
+            border-radius: 10px;
+            font-size: 0.75em;
+        }
+        .features-section {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #f0f0f0;
+        }
+        .features-title {
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #1e3c72;
+            margin-bottom: 5px;
+        }
+        .features-list {
+            font-size: 0.8em;
+            color: #555;
+            line-height: 1.5;
+            padding-left: 16px;
+            margin: 0;
+        }
+        .features-list li {
+            margin-bottom: 2px;
+        }
+        .providers-section {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #f0f0f0;
+        }
+        .providers-title {
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #27ae60;
+            margin-bottom: 5px;
+        }
+        .providers-list {
+            font-size: 0.8em;
+            color: #555;
+            line-height: 1.8;
+            background: #f0fff4;
+            padding: 6px 10px;
+            border-radius: 6px;
+            border-left: 3px solid #27ae60;
+        }
+        .provider-link {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .provider-link:hover {
+            color: #1e8449;
+            text-decoration: underline;
+        }
+        .compare-checkbox {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        /* 비교 패널 */
+        .compare-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 3px solid #1e3c72;
+            padding: 15px 20px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.2);
+        }
+        .compare-panel.active {
+            transform: translateY(0);
+        }
+        .compare-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .compare-items {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+        .compare-item {
+            min-width: 130px;
+            padding: 8px 12px;
+            background: #e3f2fd;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9em;
+        }
+        .remove-compare {
+            background: #f44336;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            font-size: 0.8em;
+            line-height: 1;
+        }
+        .compare-btn-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .compare-btn {
+            padding: 10px 25px;
+            background: #1e3c72;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        .compare-btn:hover { background: #2a5298; }
+        .compare-btn:disabled { background: #ccc; cursor: not-allowed; }
+        .compare-reset-btn {
+            padding: 8px 15px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.85em;
+        }
+        .compare-reset-btn:hover { background: #c0392b; }
+
+        /* 모달 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            overflow-y: auto;
+        }
+        .modal.active { display: block; }
+        .modal-content {
+            background: white;
+            margin: 50px auto;
+            max-width: 1200px;
+            border-radius: 15px;
+            padding: 30px;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .close-modal {
+            font-size: 2em;
+            cursor: pointer;
+            color: #666;
+        }
+        .close-modal:hover { color: #f44336; }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #e0e0e0;
+        }
+        .comparison-table th {
+            background: #1e3c72;
+            color: white;
+            font-weight: 600;
+        }
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        /* 문의하기 탭 스타일 */
+        .contact-container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+        .contact-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .contact-header h2 {
+            color: #1e3c72;
+            margin-bottom: 10px;
+        }
+        .contact-header p {
+            color: #666;
+        }
+        .contact-form {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid #e0e0e0;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        .form-group label span {
+            color: #e74c3c;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #1e3c72;
+            outline: none;
+        }
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(30, 60, 114, 0.4);
+        }
+        .contact-info {
+            margin-top: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            border-left: 4px solid #1e3c72;
+        }
+        .contact-info h4 {
+            color: #1e3c72;
+            margin-bottom: 10px;
+        }
+        .contact-info p {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.8;
+        }
+
+        /* 스택 빌더 스타일 */
+        .stack-builder-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        .stack-selection {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .stack-category-section {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 2px solid #e0e0e0;
+        }
+        .stack-category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 8px;
+            background: #1e3c72;
+            color: white;
+            border-radius: 5px;
+        }
+        .stack-category-header:hover {
+            background: #2a5298;
+        }
+        .stack-category-title {
+            font-weight: bold;
+            font-size: 0.95em;
+        }
+        .stack-category-badge {
+            background: white;
+            color: #1e3c72;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+        .stack-solutions-list {
+            display: none;
+            margin-top: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .stack-solutions-list.active {
+            display: block;
+        }
+        .stack-solution-item {
+            padding: 8px 10px;
+            margin: 4px 0;
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9em;
+        }
+        .stack-solution-item:hover {
+            border-color: #1e3c72;
+            background: #e3f2fd;
+        }
+        .stack-solution-item.selected {
+            border-color: #1e3c72;
+            background: #e3f2fd;
+            font-weight: 600;
+        }
+        .add-to-stack-btn {
+            padding: 4px 10px;
+            background: #1e3c72;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+        .add-to-stack-btn:hover {
+            background: #2a5298;
+        }
+        .my-stack-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 3px solid #1e3c72;
+            position: sticky;
+            top: 20px;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+        }
+        .my-stack-header {
+            text-align: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .my-stack-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #1e3c72;
+            margin-bottom: 5px;
+        }
+        .my-stack-count {
+            font-size: 0.85em;
+            color: #666;
+        }
+        .stack-item {
+            background: #f8f9fa;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            border-left: 3px solid #1e3c72;
+        }
+        .stack-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+        }
+        .stack-item-name {
+            font-weight: bold;
+            color: #1e3c72;
+            font-size: 0.9em;
+        }
+        .stack-item-category {
+            font-size: 0.75em;
+            color: #666;
+        }
+        .remove-stack-btn {
+            background: #f44336;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            font-size: 0.8em;
+            line-height: 1;
+        }
+        .stack-actions {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .stack-action-btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: all 0.2s ease;
+        }
+        .check-compat-btn {
+            background: #1e3c72;
+            color: white;
+        }
+        .check-compat-btn:hover { background: #2a5298; }
+        .check-compat-btn:disabled { background: #ccc; cursor: not-allowed; }
+        .export-stack-btn {
+            background: #4caf50;
+            color: white;
+        }
+        .export-stack-btn:hover { background: #45a049; }
+        .clear-stack-btn {
+            background: #f44336;
+            color: white;
+        }
+        .clear-stack-btn:hover { background: #d32f2f; }
+        .empty-stack-message {
+            text-align: center;
+            padding: 30px 15px;
+            color: #999;
+        }
+        .empty-stack-message .emoji {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        /* 솔루션 미리보기 */
+        .solution-preview {
+            margin-top: 20px;
+            border-top: 2px solid #e0e0e0;
+            padding-top: 15px;
+        }
+        .preview-header {
+            font-weight: 600;
+            color: #1e3c72;
+            font-size: 0.95em;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed #e0e0e0;
+        }
+        .preview-content {
+            min-height: 180px;
+        }
+        .preview-empty {
+            text-align: center;
+            padding: 30px 10px;
+            color: #aaa;
+        }
+        .preview-empty-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        .preview-empty p {
+            font-size: 0.85em;
+            line-height: 1.5;
+        }
+        .preview-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            animation: previewFadeIn 0.3s ease;
+        }
+        @keyframes previewFadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .preview-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        .preview-card-name {
+            font-weight: 700;
+            font-size: 1.1em;
+            color: #1e3c72;
+        }
+        .preview-card-vendor {
+            color: #666;
+            font-size: 0.85em;
+            margin-top: 2px;
+        }
+        .preview-card-license {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 600;
+        }
+        .preview-card-category {
+            display: inline-block;
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            margin-bottom: 10px;
+        }
+        .preview-card-url {
+            font-size: 0.8em;
+            color: #2a5298;
+            margin-bottom: 10px;
+        }
+        .preview-card-url a {
+            color: #2a5298;
+            text-decoration: none;
+        }
+        .preview-card-url a:hover {
+            text-decoration: underline;
+        }
+        .preview-card-features {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #e8e8e8;
+        }
+        .preview-card-features-title {
+            font-size: 0.8em;
+            font-weight: 600;
+            color: #1e3c72;
+            margin-bottom: 6px;
+        }
+        .preview-card-features ul {
+            margin: 0;
+            padding-left: 16px;
+            font-size: 0.8em;
+            color: #555;
+            line-height: 1.6;
+        }
+        .preview-card-providers {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #e8e8e8;
+        }
+        .preview-card-providers-title {
+            font-size: 0.8em;
+            font-weight: 600;
+            color: #27ae60;
+            margin-bottom: 6px;
+        }
+        .preview-card-providers-list {
+            font-size: 0.8em;
+            color: #555;
+            background: #f0fff4;
+            padding: 6px 10px;
+            border-radius: 6px;
+            border-left: 3px solid #27ae60;
+        }
+        .preview-card-providers-list a {
+            color: #27ae60;
+            text-decoration: none;
+        }
+        .preview-card-providers-list a:hover {
+            text-decoration: underline;
+        }
+        .preview-card-tags {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        .preview-card-tags .tag {
+            padding: 3px 8px;
+            background: #e3f2fd;
+            color: #1976d2;
+            border-radius: 10px;
+            font-size: 0.7em;
+        }
+
+        /* 페이지네이션 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .pagination button {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.2s;
+        }
+        .pagination button:hover {
+            background: #e3f2fd;
+            border-color: #1e3c72;
+        }
+        .pagination button.active {
+            background: #1e3c72;
+            color: white;
+            border-color: #1e3c72;
+        }
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .page-info {
+            padding: 8px 15px;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 1200px) {
+            .stack-builder-container {
+                grid-template-columns: 1fr;
+            }
+            .my-stack-panel {
+                position: static;
+                max-height: none;
+            }
+        }
+        @media (max-width: 768px) {
+            .solutions-grid { grid-template-columns: 1fr !important; }
+            .header h1 { font-size: 1.8em; }
+            .tab-btn { padding: 12px 20px; font-size: 0.95em; }
+            .form-row { grid-template-columns: 1fr; }
+            .list-view .solution-card { flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 오픈소스 솔루션 가이드 2025</h1>
+            <p style="color: #666; margin-top: 10px;">270+ 솔루션 비교·분석으로 찾는 최적의 기술 스택</p>
+        </div>
+
+        <div class="tab-navigation">
+            <button class="tab-btn active" onclick="switchTab('explorer')">🔍 솔루션 탐색</button>
+            <button class="tab-btn" onclick="switchTab('builder')">🛠️ 스택 구성</button>
+            <button class="tab-btn" onclick="switchTab('contact')">📧 문의하기</button>
+        </div>
+
+        <!-- 솔루션 탐색 탭 -->
+        <div id="explorerTab" class="tab-content active">
+            <div class="search-container">
+                <input type="text" class="search-box" id="searchBox" placeholder="솔루션, 기업명, 카테고리 검색...">
+            </div>
+            <div class="stats-section">
+                <div class="stat-card"><div class="stat-number" id="totalSolutions">0</div><div class="stat-label">총 솔루션</div></div>
+                <div class="stat-card"><div class="stat-number" id="totalCategories">0</div><div class="stat-label">카테고리</div></div>
+                <div class="stat-card"><div class="stat-number" id="totalProviders">0</div><div class="stat-label">기술지원 기업</div></div>
+                <div class="stat-card"><div class="stat-number" id="selectedCount">0</div><div class="stat-label">비교 선택</div></div>
+            </div>
+            <!-- 카테고리 탭 -->
+            <div class="category-tabs-container">
+                <div class="category-tabs-header">
+                    <span class="category-tabs-title">📂 카테고리 선택</span>
+                    <span class="category-count-info" id="categoryCountInfo">전체 0개 솔루션</span>
+                </div>
+                <div class="category-tabs" id="categoryTabs"></div>
+            </div>
+
+            <!-- 결과 헤더 & 뷰 토글 -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                <div id="resultHeader" style="font-size: 1.1em; font-weight: 600; color: #1e3c72;">
+                    <span id="currentCategoryName">전체</span>
+                    <span style="color: #666; font-weight: 400;">(<span id="filteredCount">0</span>개)</span>
+                </div>
+                <div class="view-toggle">
+                    <button class="view-btn active" onclick="setView('compact')">📋 컴팩트</button>
+                    <button class="view-btn" onclick="setView('detailed')">📝 상세</button>
+                    <button class="view-btn" onclick="setView('list')">📄 리스트</button>
+                </div>
+            </div>
+
+            <!-- 기존 카테고리 nav 숨김 -->
+            <div class="category-nav" id="categoryNav" style="display:none;"></div>
+            <div class="solutions-grid compact-view" id="solutionsGrid"></div>
+            <div class="pagination" id="pagination"></div>
+        </div>
+
+        <!-- 스택 구성 탭 -->
+        <div id="builderTab" class="tab-content">
+            <div class="stack-builder-container">
+                <div class="stack-selection">
+                    <h2 style="color: #1e3c72; margin-bottom: 20px;">📦 카테고리별 솔루션 선택</h2>
+                    <div id="stackCategoriesContainer"></div>
+                </div>
+                <div class="my-stack-panel">
+                    <div class="my-stack-header">
+                        <div class="my-stack-title">🎯 나의 기술 스택</div>
+                        <div class="my-stack-count"><span id="stackCount">0</span>개 솔루션</div>
+                    </div>
+                    <div id="myStackItems">
+                        <div class="empty-stack-message">
+                            <div class="emoji">📦</div>
+                            <p>솔루션을 선택하여<br>기술 스택을 구성하세요!</p>
+                        </div>
+                    </div>
+                    <div class="stack-actions">
+                        <button class="stack-action-btn check-compat-btn" id="checkCompatBtn" onclick="checkStackCompatibility()" disabled>
+                            ⚖️ 라이선스 호환성 검사
+                        </button>
+                        <button class="stack-action-btn export-stack-btn" onclick="exportStack()" disabled>
+                            💾 스택 내보내기
+                        </button>
+                        <button class="stack-action-btn clear-stack-btn" onclick="clearStack()" disabled>
+                            🗑️ 초기화
+                        </button>
+                    </div>
+
+                    <!-- 솔루션 미리보기 영역 -->
+                    <div class="solution-preview" id="solutionPreview">
+                        <div class="preview-header">
+                            <span>👁️ 솔루션 미리보기</span>
+                        </div>
+                        <div class="preview-content" id="previewContent">
+                            <div class="preview-empty">
+                                <div class="preview-empty-icon">🔍</div>
+                                <p>솔루션 위에 마우스를 올리면<br>상세 정보를 미리 볼 수 있습니다.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 문의하기 탭 -->
+        <div id="contactTab" class="tab-content">
+            <div class="contact-container">
+                <div class="contact-header">
+                    <h2>📧 문의하기</h2>
+                    <p>오픈소스 솔루션에 대한 문의사항을 남겨주세요.<br>담당자가 확인 후 빠르게 답변 드리겠습니다.</p>
+                </div>
+
+                <form class="contact-form" id="contactForm" onsubmit="submitContact(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>이름 <span>*</span></label>
+                            <input type="text" name="name" id="contactName" required placeholder="홍길동">
+                        </div>
+                        <div class="form-group">
+                            <label>소속/회사</label>
+                            <input type="text" name="company" id="contactCompany" placeholder="회사명">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>이메일 <span>*</span></label>
+                            <input type="email" name="email" id="contactEmail" required placeholder="email@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label>연락처</label>
+                            <input type="tel" name="phone" id="contactPhone" placeholder="010-1234-5678">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>문의 유형 <span>*</span></label>
+                        <select name="type" id="contactType" required>
+                            <option value="">선택해주세요</option>
+                            <option value="solution">솔루션 도입 문의</option>
+                            <option value="support">기술 지원 문의</option>
+                            <option value="license">라이선스 관련 문의</option>
+                            <option value="partnership">파트너십/협력 문의</option>
+                            <option value="other">기타 문의</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>관심 솔루션 (선택)</label>
+                        <input type="text" name="solutions" id="contactSolutions" placeholder="예: Kubernetes, PostgreSQL, Docker">
+                    </div>
+
+                    <div class="form-group">
+                        <label>문의 내용 <span>*</span></label>
+                        <textarea name="message" id="contactMessage" required placeholder="문의하실 내용을 자세히 작성해주세요."></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">📤 문의 보내기</button>
+                </form>
+
+                <div class="contact-info">
+                    <h4>📞 기타 문의 방법</h4>
+                    <p>
+                        <strong>이메일:</strong> opensource@example.com<br>
+                        <strong>전화:</strong> 02-1234-5678 (평일 09:00~18:00)<br>
+                        <strong>응답시간:</strong> 영업일 기준 1~2일 이내
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="compare-panel" id="comparePanel">
+        <div class="compare-header">
+            <h3>📊 비교 선택 (<span id="compareCount">0</span>/4)</h3>
+            <div class="compare-btn-group">
+                <button class="compare-btn" id="compareBtn" onclick="showComparison()" disabled>비교 분석</button>
+                <button class="compare-reset-btn" onclick="resetComparison()">🔄 초기화</button>
+            </div>
+        </div>
+        <div class="compare-items" id="compareItems"></div>
+    </div>
+
+    <div class="modal" id="comparisonModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>⚖️ 솔루션 비교 분석</h2>
+                <span class="close-modal" onclick="closeComparison()">&times;</span>
+            </div>
+            <div id="comparisonContent"></div>
+        </div>
+    </div>
+
+    <!-- 솔루션 데이터 로드 -->
+    <script src="solutions-data.js"></script>
+
+    <script>
+        // 로컬 스토리지 키
+        const STORAGE_KEY = 'opensource_solutions_data';
+        const PROVIDERS_KEY = 'opensource_providers';
+
+        // 현재 뷰 모드와 페이지
+        let currentView = 'compact';
+        let currentPage = 1;
+        const itemsPerPage = 24;
+
+        // 서비스/기술지원 기업 URL 매핑 (확장)
+        const providerUrls = {
+            "그로윈": "https://www.growin.co.kr",
+            "락플레이스": "https://www.rockplace.com",
+            "에스코어": "https://s-core.co.kr",
+            "오픈소스컨설팅": "https://osci.kr",
+            "오에스씨코리아": "https://www.osckorea.com",
+            "네오클로바": "http://neoclova.co.kr",
+            "티맥스소프트": "https://www.tmaxsoft.com",
+            "한국레드햇": "https://www.redhat.com/ko",
+            "아이오차드": "https://iochord.io",
+            "와탭랩스": "https://whatap.io",
+            "엑셈": "https://www.ex-em.com",
+            "비트나인": "https://bitnine.net",
+            "큐브리드": "https://www.cubrid.com",
+            "알티베이스": "https://www.altibase.com",
+            "선재소프트": "https://www.sunjesoft.com",
+            "인베슘": "https://www.invesume.com",
+            "한글과컴퓨터": "https://www.hancom.com",
+            "티맥스오에스": "https://www.tmaxanc.com",
+            "가이아쓰리디": "https://www.gaia3d.com",
+            "망고시스템": "https://www.mangosystem.com",
+            "웨이버스": "https://www.waybers.com",
+            "헤르메시스": "https://www.hermesys.co.kr",
+            "넥스트폼": "https://www.nextfoam.co.kr",
+            "지노테크": "https://www.zinotech.co.kr",
+            "오베네프": "https://www.ovenef.com",
+            "엘라스틱서치코리아": "https://www.elastic.co/kr",
+            "서진디에스에이": "https://www.seojindsa.com",
+            "스패로우": "https://www.sparrowfasoo.com",
+            "LG CNS": "https://www.lgcns.com",
+            "삼성SDS": "https://www.samsungsds.com",
+            "누리꿈소프트": "https://www.nurisoft.co.kr",
+            "대보정보통신": "https://www.daebo.com",
+            "클라우데라": "https://www.cloudera.com",
+            "솔트룩스": "https://www.saltlux.com",
+            "업스테이지": "https://www.upstage.ai",
+            "카카오브레인": "https://www.kakaobrain.com",
+            "블로코": "https://www.blocko.io",
+            "아이콘루프": "https://www.iconloop.com",
+            "엘에스웨어": "https://www.lsware.com",
+            "오에스비씨": "https://www.osbc.co.kr",
+            "맨텍": "https://www.mantech.co.kr",
+            "유엔진솔루션즈": "https://www.uengine.org",
+            "핀스정보기술": "https://www.pins.co.kr",
+            "케이티디에스": "https://www.ktds.com",
+            "세림티에스지": "https://www.srtsg.co.kr",
+            "에스유소프트": "https://www.sulinux.net",
+            "이액티브": "https://www.eactive.co.kr",
+            "아온소프트": "https://www.aonsoft.co.kr"
+        };
+
+        // 데이터 로드
+        function loadSolutions() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    // 데이터가 비어있지 않은지 확인
+                    if (data && Object.keys(data).length > 0) {
+                        return data;
+                    }
+                } catch (e) {
+                    console.error('데이터 로드 실패:', e);
+                }
+            }
+            // localStorage에 데이터가 없거나 비어있으면 기본 데이터 사용
+            return getDefaultSolutions();
+        }
+
+        function getDefaultSolutions() {
+            // solutions-data.js에서 로드된 fullSolutionsData 사용
+            if (typeof fullSolutionsData !== 'undefined' && fullSolutionsData) {
+                // localStorage에도 저장
+                try {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(fullSolutionsData));
+                    console.log('✅ 솔루션 데이터가 초기화되었습니다.');
+                } catch (e) {
+                    console.warn('localStorage 저장 실패:', e);
+                }
+                return fullSolutionsData;
+            }
+            console.warn('⚠️ 솔루션 데이터를 찾을 수 없습니다.');
+            return {};
+        }
+
+        const solutions = loadSolutions();
+
+        let allSols = [];
+        let filteredSols = [];
+        let selected = [];
+        let myStack = [];
+        let currentCategory = '전체';
+
+        function flatten() {
+            allSols = [];
+            for (const [cat, sols] of Object.entries(solutions)) {
+                if (Array.isArray(sols)) {
+                    sols.forEach(s => allSols.push({...s, cat}));
+                }
+            }
+            filteredSols = [...allSols];
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            const tabIndex = {explorer: 0, builder: 1, contact: 2};
+            document.querySelectorAll('.tab-btn')[tabIndex[tab]].classList.add('active');
+            document.getElementById(tab + 'Tab').classList.add('active');
+
+            if (tab === 'builder') {
+                renderStackBuilder();
+            }
+        }
+
+        function setView(view) {
+            currentView = view;
+            document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const grid = document.getElementById('solutionsGrid');
+            grid.className = 'solutions-grid ' + view + '-view';
+
+            currentPage = 1;
+            render();
+        }
+
+        function render() {
+            const grid = document.getElementById('solutionsGrid');
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const pageSols = filteredSols.slice(start, end);
+
+            if (currentView === 'compact') {
+                grid.innerHTML = pageSols.map((s, idx) => `
+                    <div class="solution-card" onclick="toggleExpand(this)">
+                        <div class="solution-header">
+                            <div>
+                                <div class="solution-name">${s.n}</div>
+                                <div class="solution-vendor">${s.v}</div>
+                            </div>
+                            <input type="checkbox" class="compare-checkbox"
+                                   onclick="event.stopPropagation(); toggleCompare('${s.n}')"
+                                   ${selected.some(x => x.n === s.n) ? 'checked' : ''}
+                                   title="비교 선택">
+                        </div>
+                        <div class="solution-meta">
+                            <span class="license-badge license-${s.t}">${s.l}</span>
+                            ${s.tags.slice(0, 2).map(t => `<span class="tag">${t}</span>`).join('')}
+                            ${s.p && s.p.length > 0 ? `<span class="providers-count">🏢 ${s.p.length}개 기업</span>` : ''}
+                            <span class="expand-indicator">▼ 상세보기</span>
+                        </div>
+                        <div class="solution-details">
+                            <div class="solution-url">🔗 <a href="https://${s.u}" target="_blank" onclick="event.stopPropagation()">${s.u}</a></div>
+                            ${s.f && s.f.length > 0 ? `<div class="features-section"><div class="features-title">📌 주요 특징</div><ul class="features-list">${s.f.map(f => `<li>${f}</li>`).join('')}</ul></div>` : ''}
+                            ${s.p && s.p.length > 0 ? `<div class="providers-section"><div class="providers-title">🏢 기술지원 기업</div><div class="providers-list">${s.p.map(p => providerUrls[p] ? `<a href="${providerUrls[p]}" target="_blank" class="provider-link" onclick="event.stopPropagation()">${p}</a>` : p).join(', ')}</div></div>` : ''}
+                        </div>
+                    </div>
+                `).join('');
+            } else if (currentView === 'detailed') {
+                grid.innerHTML = pageSols.map(s => `
+                    <div class="solution-card">
+                        <div class="solution-header">
+                            <div style="flex:1">
+                                <div class="solution-name">${s.n}</div>
+                                <div class="solution-vendor">${s.v}</div>
+                            </div>
+                            <input type="checkbox" class="compare-checkbox"
+                                   onchange="toggleCompare('${s.n}')"
+                                   ${selected.some(x => x.n === s.n) ? 'checked' : ''}>
+                        </div>
+                        <span class="license-badge license-${s.t}">${s.l}</span>
+                        <div class="solution-url">🔗 <a href="https://${s.u}" target="_blank">${s.u}</a></div>
+                        <div class="tags-section">${s.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+                        ${s.f ? `<div class="features-section"><div class="features-title">주요 특징</div><ul class="features-list">${s.f.map(f => `<li>${f}</li>`).join('')}</ul></div>` : ''}
+                        ${s.p && s.p.length > 0 ? `<div class="providers-section"><div class="providers-title">기술지원 기업</div><div class="providers-list">${s.p.map(p => providerUrls[p] ? `<a href="${providerUrls[p]}" target="_blank" class="provider-link">${p}</a>` : p).join(', ')}</div></div>` : ''}
+                    </div>
+                `).join('');
+            } else {
+                grid.innerHTML = pageSols.map(s => `
+                    <div class="solution-card">
+                        <span class="solution-name">${s.n}</span>
+                        <span class="solution-vendor">${s.v}</span>
+                        <span class="license-badge license-${s.t}">${s.l}</span>
+                        <div class="tags-section">${s.tags.slice(0, 3).map(t => `<span class="tag">${t}</span>`).join('')}</div>
+                        <span class="providers-info">${s.p && s.p.length > 0 ? `🏢 ${s.p.length}` : ''}</span>
+                        <input type="checkbox" class="compare-checkbox"
+                               onchange="toggleCompare('${s.n}')"
+                               ${selected.some(x => x.n === s.n) ? 'checked' : ''}>
+                    </div>
+                `).join('');
+            }
+
+            renderPagination();
+        }
+
+        function toggleExpand(card) {
+            card.classList.toggle('expanded');
+        }
+
+        function renderPagination() {
+            const totalPages = Math.ceil(filteredSols.length / itemsPerPage);
+            const pagination = document.getElementById('pagination');
+
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
+
+            let html = `<button onclick="goToPage(1)" ${currentPage === 1 ? 'disabled' : ''}>«</button>`;
+            html += `<button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>‹</button>`;
+
+            const maxVisible = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+
+            if (endPage - startPage < maxVisible - 1) {
+                startPage = Math.max(1, endPage - maxVisible + 1);
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                html += `<button onclick="goToPage(${i})" class="${i === currentPage ? 'active' : ''}">${i}</button>`;
+            }
+
+            html += `<span class="page-info">${filteredSols.length}개 중 ${(currentPage-1)*itemsPerPage+1}-${Math.min(currentPage*itemsPerPage, filteredSols.length)}</span>`;
+            html += `<button onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>›</button>`;
+            html += `<button onclick="goToPage(${totalPages})" ${currentPage === totalPages ? 'disabled' : ''}>»</button>`;
+
+            pagination.innerHTML = html;
+        }
+
+        function goToPage(page) {
+            currentPage = page;
+            render();
+            window.scrollTo({top: 300, behavior: 'smooth'});
+        }
+
+        function toggleCompare(name) {
+            const sol = allSols.find(s => s.n === name);
+            if (!sol) return;
+
+            const idx = selected.findIndex(s => s.n === name);
+            if (idx >= 0) {
+                selected.splice(idx, 1);
+            } else if (selected.length < 4) {
+                selected.push(sol);
+            }
+            updateComparePanel();
+            render();
+        }
+
+        function updateComparePanel() {
+            const panel = document.getElementById('comparePanel');
+            const items = document.getElementById('compareItems');
+            const count = document.getElementById('compareCount');
+            const btn = document.getElementById('compareBtn');
+            const selectedCount = document.getElementById('selectedCount');
+
+            count.textContent = selected.length;
+            selectedCount.textContent = selected.length;
+
+            if (selected.length > 0) {
+                panel.classList.add('active');
+                items.innerHTML = selected.map(s => `
+                    <div class="compare-item">
+                        <span>${s.n}</span>
+                        <button class="remove-compare" onclick="toggleCompare('${s.n}')">×</button>
+                    </div>
+                `).join('');
+                btn.disabled = selected.length < 2;
+            } else {
+                panel.classList.remove('active');
+            }
+        }
+
+        function resetComparison() {
+            selected = [];
+            updateComparePanel();
+            render();
+        }
+
+        // 라이선스 호환성 매트릭스
+        const licenseCompatibility = {
+            // 허용적 라이선스 (Permissive)
+            'MIT': { type: 'permissive', compatible: ['MIT', 'Apache-2.0', 'BSD', 'BSD-2-Clause', 'BSD-3-Clause', 'ISC', 'GPL-2.0', 'GPL-3.0', 'LGPL', 'AGPL-3.0', 'MPL-2.0'] },
+            'Apache-2.0': { type: 'permissive', compatible: ['MIT', 'Apache-2.0', 'BSD', 'BSD-2-Clause', 'BSD-3-Clause', 'ISC', 'GPL-3.0', 'LGPL', 'AGPL-3.0', 'MPL-2.0'], incompatible: ['GPL-2.0'] },
+            'BSD': { type: 'permissive', compatible: ['MIT', 'Apache-2.0', 'BSD', 'BSD-2-Clause', 'BSD-3-Clause', 'ISC', 'GPL-2.0', 'GPL-3.0', 'LGPL', 'AGPL-3.0', 'MPL-2.0'] },
+            'BSD-2-Clause': { type: 'permissive', compatible: ['MIT', 'Apache-2.0', 'BSD', 'BSD-2-Clause', 'BSD-3-Clause', 'ISC', 'GPL-2.0', 'GPL-3.0', 'LGPL', 'AGPL-3.0', 'MPL-2.0'] },
+            'BSD-3-Clause': { type: 'permissive', compatible: ['MIT', 'Apache-2.0', 'BSD', 'BSD-2-Clause', 'BSD-3-Clause', 'ISC', 'GPL-2.0', 'GPL-3.0', 'LGPL', 'AGPL-3.0', 'MPL-2.0'] },
+            'ISC': { type: 'permissive', compatible: ['MIT', 'Apache-2.0', 'BSD', 'BSD-2-Clause', 'BSD-3-Clause', 'ISC', 'GPL-2.0', 'GPL-3.0', 'LGPL', 'AGPL-3.0', 'MPL-2.0'] },
+            // 카피레프트 라이선스 (Copyleft)
+            'GPL-2.0': { type: 'copyleft', compatible: ['MIT', 'BSD', 'BSD-2-Clause', 'BSD-3-Clause', 'ISC', 'GPL-2.0', 'LGPL'], incompatible: ['Apache-2.0', 'GPL-3.0', 'AGPL-3.0'] },
+            'GPL-3.0': { type: 'copyleft', compatible: ['MIT', 'Apache-2.0', 'BSD', 'BSD-2-Clause', 'BSD-3-Clause', 'ISC', 'GPL-3.0', 'LGPL', 'AGPL-3.0'], incompatible: ['GPL-2.0'] },
+            'LGPL': { type: 'copyleft', compatible: ['MIT', 'Apache-2.0', 'BSD', 'BSD-2-Clause', 'BSD-3-Clause', 'ISC', 'GPL-2.0', 'GPL-3.0', 'LGPL', 'AGPL-3.0', 'MPL-2.0'] },
+            'LGPL-2.1': { type: 'copyleft', compatible: ['MIT', 'BSD', 'BSD-2-Clause', 'BSD-3-Clause', 'ISC', 'GPL-2.0', 'GPL-3.0', 'LGPL', 'LGPL-2.1'] },
+            'AGPL-3.0': { type: 'copyleft', compatible: ['MIT', 'Apache-2.0', 'BSD', 'BSD-2-Clause', 'BSD-3-Clause', 'ISC', 'GPL-3.0', 'LGPL', 'AGPL-3.0'], incompatible: ['GPL-2.0'] },
+            'MPL-2.0': { type: 'weak-copyleft', compatible: ['MIT', 'Apache-2.0', 'BSD', 'BSD-2-Clause', 'BSD-3-Clause', 'ISC', 'GPL-2.0', 'GPL-3.0', 'LGPL', 'AGPL-3.0', 'MPL-2.0'] },
+            // 상용/독점
+            'Commercial': { type: 'proprietary', compatible: ['Commercial'], note: '상용 라이선스는 별도 계약 필요' },
+            'Proprietary': { type: 'proprietary', compatible: ['Proprietary'], note: '독점 라이선스는 별도 확인 필요' }
+        };
+
+        function checkLicenseCompatibility(licenses) {
+            const results = [];
+            const uniqueLicenses = [...new Set(licenses.map(l => l.trim()))];
+
+            for (let i = 0; i < uniqueLicenses.length; i++) {
+                for (let j = i + 1; j < uniqueLicenses.length; j++) {
+                    const lic1 = uniqueLicenses[i];
+                    const lic2 = uniqueLicenses[j];
+                    const info1 = licenseCompatibility[lic1];
+                    const info2 = licenseCompatibility[lic2];
+
+                    let status = 'unknown';
+                    let message = '';
+
+                    if (info1 && info2) {
+                        if (info1.incompatible && info1.incompatible.includes(lic2)) {
+                            status = 'incompatible';
+                            message = `${lic1}와 ${lic2}는 호환되지 않습니다.`;
+                        } else if (info2.incompatible && info2.incompatible.includes(lic1)) {
+                            status = 'incompatible';
+                            message = `${lic2}와 ${lic1}는 호환되지 않습니다.`;
+                        } else if (info1.compatible && info1.compatible.includes(lic2)) {
+                            status = 'compatible';
+                            message = `${lic1}와 ${lic2}는 호환됩니다.`;
+                        } else if (info1.type === 'proprietary' || info2.type === 'proprietary') {
+                            status = 'warning';
+                            message = `상용/독점 라이선스가 포함되어 있어 별도 확인이 필요합니다.`;
+                        } else {
+                            status = 'check';
+                            message = `${lic1}와 ${lic2}의 호환성을 확인해주세요.`;
+                        }
+                    } else {
+                        status = 'unknown';
+                        message = `${lic1} 또는 ${lic2}의 호환성 정보가 없습니다.`;
+                    }
+
+                    results.push({ lic1, lic2, status, message });
+                }
+            }
+            return results;
+        }
+
+        function showComparison() {
+            if (selected.length < 2) return;
+
+            const modal = document.getElementById('comparisonModal');
+            const content = document.getElementById('comparisonContent');
+
+            // 라이선스 호환성 분석
+            const licenses = selected.map(s => s.l);
+            const compatResults = checkLicenseCompatibility(licenses);
+
+            // 호환성 요약
+            const hasIncompatible = compatResults.some(r => r.status === 'incompatible');
+            const hasWarning = compatResults.some(r => r.status === 'warning' || r.status === 'check' || r.status === 'unknown');
+
+            let compatSummary = '';
+            if (hasIncompatible) {
+                compatSummary = `<div style="background: #ffebee; border: 2px solid #f44336; border-radius: 10px; padding: 15px; margin-bottom: 20px;">
+                    <h3 style="color: #c62828; margin-bottom: 10px;">⚠️ 라이선스 호환성 경고</h3>
+                    <p style="color: #b71c1c; margin-bottom: 10px;">선택한 솔루션 중 <strong>호환되지 않는 라이선스</strong>가 있습니다.</p>
+                    <ul style="margin: 0; padding-left: 20px; color: #c62828;">
+                        ${compatResults.filter(r => r.status === 'incompatible').map(r => `<li>${r.message}</li>`).join('')}
+                    </ul>
+                </div>`;
+            } else if (hasWarning) {
+                compatSummary = `<div style="background: #fff8e1; border: 2px solid #ffc107; border-radius: 10px; padding: 15px; margin-bottom: 20px;">
+                    <h3 style="color: #f57f17; margin-bottom: 10px;">⚡ 라이선스 확인 필요</h3>
+                    <p style="color: #ff8f00; margin-bottom: 10px;">일부 라이선스의 호환성을 추가로 확인해주세요.</p>
+                    <ul style="margin: 0; padding-left: 20px; color: #ff8f00;">
+                        ${compatResults.filter(r => r.status !== 'compatible').map(r => `<li>${r.message}</li>`).join('')}
+                    </ul>
+                </div>`;
+            } else {
+                compatSummary = `<div style="background: #e8f5e9; border: 2px solid #4caf50; border-radius: 10px; padding: 15px; margin-bottom: 20px;">
+                    <h3 style="color: #2e7d32; margin-bottom: 10px;">✅ 라이선스 호환성 양호</h3>
+                    <p style="color: #388e3c; margin: 0;">선택한 모든 솔루션의 라이선스가 서로 호환됩니다.</p>
+                </div>`;
+            }
+
+            let html = compatSummary;
+
+            // 라이선스 호환성 매트릭스 테이블
+            if (selected.length >= 2) {
+                html += `<div style="margin-bottom: 20px;">
+                    <h3 style="color: #1e3c72; margin-bottom: 10px;">📋 라이선스 호환성 매트릭스</h3>
+                    <table class="comparison-table">
+                        <tr><th></th>${selected.map(s => `<th>${s.n}<br><small style="font-weight:normal">(${s.l})</small></th>`).join('')}</tr>
+                        ${selected.map((s1, i) => `
+                            <tr>
+                                <td><strong>${s1.n}</strong><br><small>${s1.l}</small></td>
+                                ${selected.map((s2, j) => {
+                                    if (i === j) return '<td style="background:#f5f5f5;">-</td>';
+                                    const result = compatResults.find(r =>
+                                        (r.lic1 === s1.l && r.lic2 === s2.l) ||
+                                        (r.lic1 === s2.l && r.lic2 === s1.l)
+                                    );
+                                    if (!result) return '<td>-</td>';
+                                    const bgColor = result.status === 'compatible' ? '#e8f5e9' :
+                                                   result.status === 'incompatible' ? '#ffebee' : '#fff8e1';
+                                    const icon = result.status === 'compatible' ? '✅' :
+                                                result.status === 'incompatible' ? '❌' : '⚠️';
+                                    return `<td style="background:${bgColor}; text-align:center;">${icon}</td>`;
+                                }).join('')}
+                            </tr>
+                        `).join('')}
+                    </table>
+                    <div style="margin-top: 10px; font-size: 0.85em; color: #666;">
+                        ✅ 호환 &nbsp; ❌ 비호환 &nbsp; ⚠️ 확인필요
+                    </div>
+                </div>`;
+            }
+
+            // 솔루션 비교 테이블
+            html += '<h3 style="color: #1e3c72; margin-bottom: 10px;">📊 솔루션 상세 비교</h3>';
+            html += '<table class="comparison-table"><tr><th>항목</th>';
+            selected.forEach(s => html += `<th>${s.n}</th>`);
+            html += '</tr>';
+
+            const rows = [
+                {label: '개발사', key: 'v'},
+                {label: '라이선스', key: 'l'},
+                {label: '유형', key: 't', format: v => v === 'permissive' ? '🟢 허용적' : v === 'copyleft' ? '🟠 카피레프트' : '🔴 독점'},
+                {label: '카테고리', key: 'cat'},
+                {label: '공식 사이트', key: 'u', format: v => `<a href="https://${v}" target="_blank">${v}</a>`}
+            ];
+
+            rows.forEach(row => {
+                html += `<tr><td><strong>${row.label}</strong></td>`;
+                selected.forEach(s => {
+                    const val = s[row.key];
+                    html += `<td>${row.format ? row.format(val) : val}</td>`;
+                });
+                html += '</tr>';
+            });
+
+            html += '<tr><td><strong>주요 특징</strong></td>';
+            selected.forEach(s => {
+                html += `<td><ul style="margin:0;padding-left:18px;">${(s.f || []).map(f => `<li>${f}</li>`).join('')}</ul></td>`;
+            });
+            html += '</tr>';
+
+            html += '<tr><td><strong>기술지원 기업</strong></td>';
+            selected.forEach(s => {
+                html += `<td>${(s.p || []).map(p => providerUrls[p] ? `<a href="${providerUrls[p]}" target="_blank">${p}</a>` : p).join(', ') || '-'}</td>`;
+            });
+            html += '</tr></table>';
+
+            content.innerHTML = html;
+            modal.classList.add('active');
+        }
+
+        function closeComparison() {
+            document.getElementById('comparisonModal').classList.remove('active');
+        }
+
+        function renderCategories() {
+            // 새로운 탭 스타일 카테고리
+            const tabsContainer = document.getElementById('categoryTabs');
+            const countInfo = document.getElementById('categoryCountInfo');
+
+            // 카테고리별 솔루션 개수 계산
+            const catCounts = {};
+            catCounts['전체'] = allSols.length;
+            Object.keys(solutions).forEach(cat => {
+                catCounts[cat] = solutions[cat] ? solutions[cat].length : 0;
+            });
+
+            const cats = ['전체', ...Object.keys(solutions)];
+
+            // 카테고리 아이콘 매핑
+            const catIcons = {
+                '전체': '🌐',
+                '운영체제': '💻',
+                '데이터베이스': '🗄️',
+                '미들웨어': '⚙️',
+                '빅데이터/AI': '🤖',
+                '클라우드/가상화': '☁️',
+                '보안': '🔒',
+                '네트워크': '🌐',
+                '개발도구': '🛠️',
+                '모니터링': '📊',
+                'CMS/포털': '📄',
+                '협업/그룹웨어': '👥',
+                'ERP/CRM': '💼',
+                'GIS/공간정보': '🗺️',
+                '미디어/그래픽': '🎨',
+                '블록체인': '🔗',
+                '자원관리': '📦',
+                '메시징': '💬',
+                '라이선스검증/보안분석': '🔍'
+            };
+
+            tabsContainer.innerHTML = cats.map(cat => {
+                const icon = catIcons[cat] || '📁';
+                const count = catCounts[cat] || 0;
+                return `<button class="category-tab ${cat === currentCategory ? 'active' : ''}" onclick="filterByCategory('${cat}')">
+                    ${icon} ${cat}
+                    <span class="cat-count">${count}</span>
+                </button>`;
+            }).join('');
+
+            // 현재 카테고리 정보 업데이트
+            countInfo.textContent = `${currentCategory} ${catCounts[currentCategory] || 0}개 솔루션`;
+        }
+
+        function filterByCategory(cat) {
+            currentCategory = cat;
+            currentPage = 1;
+
+            if (cat === '전체') {
+                filteredSols = [...allSols];
+            } else {
+                filteredSols = allSols.filter(s => s.cat === cat);
+            }
+
+            renderCategories();
+            updateFilteredInfo();
+            render();
+        }
+
+        function updateFilteredInfo() {
+            document.getElementById('currentCategoryName').textContent = currentCategory;
+            document.getElementById('filteredCount').textContent = filteredSols.length;
+        }
+
+        function updateStats() {
+            document.getElementById('totalSolutions').textContent = allSols.length;
+            document.getElementById('totalCategories').textContent = Object.keys(solutions).length;
+
+            const providers = new Set();
+            allSols.forEach(s => (s.p || []).forEach(p => providers.add(p)));
+            document.getElementById('totalProviders').textContent = providers.size;
+        }
+
+        // 스택 빌더
+        function renderStackBuilder() {
+            const container = document.getElementById('stackCategoriesContainer');
+            container.innerHTML = Object.entries(solutions).map(([cat, sols]) => `
+                <div class="stack-category-section">
+                    <div class="stack-category-header" onclick="toggleStackCategory(this)">
+                        <span class="stack-category-title">${cat}</span>
+                        <span class="stack-category-badge">${sols.length}</span>
+                    </div>
+                    <div class="stack-solutions-list">
+                        ${sols.map(s => `
+                            <div class="stack-solution-item ${myStack.some(x => x.n === s.n) ? 'selected' : ''}"
+                                 data-name="${s.n}"
+                                 onmouseenter="showSolutionPreview('${s.n}')"
+                                 onmouseleave="hideSolutionPreview()">
+                                <span>${s.n} <small style="color:#888">(${s.l})</small></span>
+                                <button class="add-to-stack-btn" onclick="event.stopPropagation(); addToStack('${s.n}', '${cat}')">
+                                    ${myStack.some(x => x.n === s.n) ? '✓' : '+'}
+                                </button>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 솔루션 미리보기 표시
+        let previewTimeout = null;
+
+        function showSolutionPreview(name) {
+            clearTimeout(previewTimeout);
+            const sol = allSols.find(s => s.n === name);
+            if (!sol) return;
+
+            const previewContent = document.getElementById('previewContent');
+
+            const licenseClass = sol.t === 'permissive' ? 'license-permissive' :
+                                sol.t === 'copyleft' ? 'license-copyleft' : 'license-proprietary';
+
+            previewContent.innerHTML = `
+                <div class="preview-card">
+                    <div class="preview-card-header">
+                        <div>
+                            <div class="preview-card-name">${sol.n}</div>
+                            <div class="preview-card-vendor">${sol.v}</div>
+                        </div>
+                        <span class="preview-card-license ${licenseClass}">${sol.l}</span>
+                    </div>
+                    <span class="preview-card-category">${sol.cat}</span>
+                    <div class="preview-card-url">🔗 <a href="https://${sol.u}" target="_blank">${sol.u}</a></div>
+                    ${sol.tags && sol.tags.length > 0 ? `
+                        <div class="preview-card-tags">
+                            ${sol.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+                        </div>
+                    ` : ''}
+                    ${sol.f && sol.f.length > 0 ? `
+                        <div class="preview-card-features">
+                            <div class="preview-card-features-title">📌 주요 특징</div>
+                            <ul>${sol.f.map(f => `<li>${f}</li>`).join('')}</ul>
+                        </div>
+                    ` : ''}
+                    ${sol.p && sol.p.length > 0 ? `
+                        <div class="preview-card-providers">
+                            <div class="preview-card-providers-title">🏢 기술지원 기업 (${sol.p.length}개)</div>
+                            <div class="preview-card-providers-list">
+                                ${sol.p.map(p => providerUrls[p] ?
+                                    `<a href="${providerUrls[p]}" target="_blank">${p}</a>` : p
+                                ).join(', ')}
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        function hideSolutionPreview() {
+            previewTimeout = setTimeout(() => {
+                const previewContent = document.getElementById('previewContent');
+                previewContent.innerHTML = `
+                    <div class="preview-empty">
+                        <div class="preview-empty-icon">🔍</div>
+                        <p>솔루션 위에 마우스를 올리면<br>상세 정보를 미리 볼 수 있습니다.</p>
+                    </div>
+                `;
+            }, 300);
+        }
+
+        function toggleStackCategory(header) {
+            const list = header.nextElementSibling;
+            list.classList.toggle('active');
+        }
+
+        function addToStack(name, cat) {
+            const sol = allSols.find(s => s.n === name);
+            if (!sol) return;
+
+            const idx = myStack.findIndex(s => s.n === name);
+            if (idx >= 0) {
+                myStack.splice(idx, 1);
+            } else {
+                myStack.push({...sol, cat});
+            }
+
+            updateMyStack();
+            renderStackBuilder();
+        }
+
+        function updateMyStack() {
+            const container = document.getElementById('myStackItems');
+            const count = document.getElementById('stackCount');
+            const compatBtn = document.getElementById('checkCompatBtn');
+            const exportBtn = document.querySelector('.export-stack-btn');
+            const clearBtn = document.querySelector('.clear-stack-btn');
+
+            count.textContent = myStack.length;
+
+            if (myStack.length === 0) {
+                container.innerHTML = `<div class="empty-stack-message"><div class="emoji">📦</div><p>솔루션을 선택하여<br>기술 스택을 구성하세요!</p></div>`;
+                compatBtn.disabled = true;
+                exportBtn.disabled = true;
+                clearBtn.disabled = true;
+            } else {
+                container.innerHTML = myStack.map(s => `
+                    <div class="stack-item">
+                        <div class="stack-item-header">
+                            <div>
+                                <div class="stack-item-name">${s.n}</div>
+                                <div class="stack-item-category">${s.cat} · ${s.l}</div>
+                            </div>
+                            <button class="remove-stack-btn" onclick="addToStack('${s.n}', '${s.cat}')">×</button>
+                        </div>
+                    </div>
+                `).join('');
+                compatBtn.disabled = myStack.length < 2;
+                exportBtn.disabled = false;
+                clearBtn.disabled = false;
+            }
+        }
+
+        function clearStack() {
+            if (confirm('스택을 초기화하시겠습니까?')) {
+                myStack = [];
+                updateMyStack();
+                renderStackBuilder();
+            }
+        }
+
+        function checkStackCompatibility() {
+            if (myStack.length < 2) return;
+            selected = [...myStack];
+            showComparison();
+        }
+
+        function exportStack() {
+            const text = myStack.map(s => `${s.n} (${s.cat}) - ${s.l}`).join('\n');
+            const blob = new Blob([text], {type: 'text/plain'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'my-stack.txt';
+            a.click();
+        }
+
+        // 문의하기 폼 전송
+        function submitContact(e) {
+            e.preventDefault();
+
+            const form = document.getElementById('contactForm');
+            const formData = new FormData(form);
+
+            const name = formData.get('name');
+            const company = formData.get('company') || '미입력';
+            const email = formData.get('email');
+            const phone = formData.get('phone') || '미입력';
+            const type = formData.get('type');
+            const solutions = formData.get('solutions') || '미입력';
+            const message = formData.get('message');
+
+            const typeLabels = {
+                solution: '솔루션 도입 문의',
+                support: '기술 지원 문의',
+                license: '라이선스 관련 문의',
+                partnership: '파트너십/협력 문의',
+                other: '기타 문의'
+            };
+
+            // 이메일 내용 구성
+            const subject = encodeURIComponent(`[오픈소스 솔루션 가이드] ${typeLabels[type]} - ${name}`);
+            const body = encodeURIComponent(
+`안녕하세요,
+
+오픈소스 솔루션 가이드 웹사이트를 통해 문의드립니다.
+
+━━━━━━━━━━━━━━━━━━━━
+[문의자 정보]
+━━━━━━━━━━━━━━━━━━━━
+• 이름: ${name}
+• 소속/회사: ${company}
+• 이메일: ${email}
+• 연락처: ${phone}
+
+━━━━━━━━━━━━━━━━━━━━
+[문의 내용]
+━━━━━━━━━━━━━━━━━━━━
+• 문의 유형: ${typeLabels[type]}
+• 관심 솔루션: ${solutions}
+
+• 상세 내용:
+${message}
+
+━━━━━━━━━━━━━━━━━━━━
+
+감사합니다.
+`
+            );
+
+            // mailto 링크로 이메일 클라이언트 열기
+            // 실제 운영 시 아래 이메일 주소를 변경하세요
+            const mailtoLink = `mailto:opensource@example.com?subject=${subject}&body=${body}`;
+
+            window.location.href = mailtoLink;
+
+            alert('이메일 클라이언트가 열립니다.\n메일을 전송해주세요.\n\n※ 이메일 클라이언트가 설정되지 않은 경우,\n   opensource@example.com 으로 직접 문의해주세요.');
+        }
+
+        // 검색 기능
+        document.getElementById('searchBox').addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase().trim();
+            currentPage = 1;
+
+            if (!query) {
+                filteredSols = currentCategory === '전체' ? [...allSols] : allSols.filter(s => s.cat === currentCategory);
+            } else {
+                let baseSols = currentCategory === '전체' ? allSols : allSols.filter(s => s.cat === currentCategory);
+                filteredSols = baseSols.filter(s =>
+                    s.n.toLowerCase().includes(query) ||
+                    s.v.toLowerCase().includes(query) ||
+                    s.cat.toLowerCase().includes(query) ||
+                    s.l.toLowerCase().includes(query) ||
+                    (s.tags && s.tags.some(t => t.toLowerCase().includes(query))) ||
+                    (s.p && s.p.some(p => p.toLowerCase().includes(query)))
+                );
+            }
+            updateFilteredInfo();
+            render();
+        });
+
+        // 초기화
+        flatten();
+        renderCategories();
+        updateStats();
+        updateFilteredInfo();
+        render();
+    </script>
+</body>
+</html>
